@@ -5,6 +5,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import OpenAI from 'openai';
 import 'dotenv/config';
+import md_handler from './utils/transmogrify.js';
 
 const program = new Command();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -17,6 +18,7 @@ program
 program
   .option('-p, --path <path>', 'Path to your project directory')
   .option('-b, --base-url <url>', 'Base URL for your API')
+  .option('-t, --target <format>', 'Target format for the documentation');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -109,6 +111,15 @@ async function talk_to_ai(base_url, data) {
     // console.log('Output:', output);
     await fs.writeFile(output, JSON.stringify(responses, null, 2));
     console.log('API documentation generated successfully');
+    if (options.target) {
+      console.log('Target format:', options.target);
+      if (options.target === "md") {
+        await md_handler(output, options.path);
+      }
+    } else {
+      console.log('No target format specified');
+      process.exit(1);
+    }
   } else {
     console.log('package.json not found');
   }
