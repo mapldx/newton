@@ -39,27 +39,44 @@ async function parse_path(directory, target = 'package.json') {
 }
 
 async function parse_entrypoint(package_path) {
-  // console.log('Parsing package.json', package_path);
-  const entrypoint = await fs.readFile(package_path, 'utf8')
-    .then(async (data) => {
-      let package_json = JSON.parse(data);
-      let entrypoint = package_json.main;
-      // console.log('Entrypoint:', entrypoint);
-      if (!entrypoint) {
-        console.log('No entrypoint found');
-        process.exit(1);
-      }
-      return [path.join(path.dirname(package_path), entrypoint)];
+  try {
+    const file = await fs.readFile(package_path, 'utf8');
+    const entrypoint = JSON.parse(file).main;
+    if (!entrypoint) {
+      console.log('No entrypoint found');
+      process.exit(1);
     }
-  );
-  return entrypoint;
+    // console.log('Entrypoint:', entrypoint);
+    const entrypoint_path = path.join(path.dirname(package_path), entrypoint);
+    const data = await fs.readFile(entrypoint_path, 'utf8');
+    // console.log('Data:', data);
+    let fn = false;
+    let content = '';
+    for (let line of data.split('\n')) {
+      if (fn) {
+        content += line + '\n';
+        if (line === '});') {
+          fn = false;
+          // console.log('Content:', content);
+          content = '';
+        }
+      } else if (line.match(/app\.(get|post|put|delete)\(/)) {
+        fn = true;
+        content = line + '\n';
+      }
+    }
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    process.exit(1);
+  }
 }
 
 (async () => {
   const [package_path] = await parse_path(options.path);
   if (package_path) {
-    let entrypoint = await parse_entrypoint(package_path);
-    console.log('Entrypoint:', entrypoint);
+    let endpoints = await parse_entrypoint(package_path);
+    console.log('Endpoints:\n\n', endpoints);
   } else {
     console.log('package.json not found');
   }
