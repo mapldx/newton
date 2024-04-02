@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import OpenAI from 'openai';
 import 'dotenv/config';
-import md_handler from './utils/transmogrify.js';
+import { md_handler, html_handler } from './utils/transmogrify.js';
 
 const program = new Command();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -115,6 +115,8 @@ async function talk_to_ai(base_url, data) {
       console.log('Target format:', options.target);
       if (options.target === "md") {
         await md_handler(output, options.path);
+      } else if (options.target === "html") {
+        await html_handler(output, options.path);
       }
     } else {
       console.log('No target format specified');
