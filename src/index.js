@@ -6,7 +6,7 @@ import path from 'path';
 import { md_handler, html_handler } from './utils/transmogrify.js';
 import { talk_to_ai } from './utils/ai.js';
 import inquirer from 'inquirer';
-import ora, { spinners } from 'ora';
+import ora from 'ora';
 
 const program = new Command();
 process.removeAllListeners('warning');
@@ -14,12 +14,12 @@ process.removeAllListeners('warning');
 program
   .name('newton')
   .description('A CLI that creates your API documentation for you with AI')
-  .version('0.0.1');
+  .version('1.0.0');
 
-program
-  .option('-p, --path <path>', 'Path to your project directory')
-  .option('-b, --base-url <url>', 'Base URL for your API')
-  .option('-t, --target <format>', 'Target format for the documentation');
+// program
+//   .option('-p, --path <path>', 'Path to your project directory')
+//   .option('-b, --base-url <url>', 'Base URL for your API')
+//   .option('-t, --target <format>', 'Target format for the documentation');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -113,7 +113,8 @@ async function parse_entrypoint(package_path, base_url) {
 
 (async () => {
   if (process.argv.length == 2) {
-    console.log('Starting in interactive mode...\n');
+    console.log('🦊 newton – a CLI that creates your API documentation for you with AI');
+    // console.log('Starting in interactive mode...\n');
     inquirer.prompt([
       {
         type: 'input',
@@ -174,30 +175,30 @@ async function parse_entrypoint(package_path, base_url) {
       }
     });
   } else if (process.argv.length > 2) {
-    if (process.argv.length < 6) {
-      program.help();
-    }
-    const [package_path] = await parse_path(options.path);
-    if (package_path) {
-      let responses = await parse_entrypoint(package_path, options.baseUrl);
-      const output = path.join(options.path, 'api-documentation.json');
-      await fs.writeFile(output, JSON.stringify(responses, null, 2));
-      console.log('API documentation generated successfully');
-      if (options.target) {
-        console.log('Target format:', options.target);
-        if (options.target === "Markdown (.md)") {
-          await md_handler(output, options.path);
-        } else if (options.target === "Simple HTML (.html)") {
-          await html_handler(output, options.path);
-        } else if (options.target === "JSON (.json)") {
-          console.log('JSON output saved to:', output);
-        }
-      } else {
-        console.log('No target format specified');
-        process.exit(1);
-      }
-    } else {
-      console.log('package.json not found');
-    }
+    // if (process.argv.length < 6) {
+    //   program.help();
+    // }
+    // const [package_path] = await parse_path(options.path);
+    // if (package_path) {
+    //   let responses = await parse_entrypoint(package_path, options.baseUrl);
+    //   const output = path.join(options.path, 'api-documentation.json');
+    //   await fs.writeFile(output, JSON.stringify(responses, null, 2));
+    //   console.log('API documentation generated successfully');
+    //   if (options.target) {
+    //     console.log('Target format:', options.target);
+    //     if (options.target === "Markdown (.md)") {
+    //       await md_handler(output, options.path);
+    //     } else if (options.target === "Simple HTML (.html)") {
+    //       await html_handler(output, options.path);
+    //     } else if (options.target === "JSON (.json)") {
+    //       console.log('JSON output saved to:', output);
+    //     }
+    //   } else {
+    //     console.log('No target format specified');
+    //     process.exit(1);
+    //   }
+    // } else {
+    //   console.log('package.json not found');
+    // }
   }
 })();
