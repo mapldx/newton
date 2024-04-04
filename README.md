@@ -18,11 +18,15 @@ cd newton
 ```
 echo "OPENAI_API_KEY=sk-123" > .env
 ```
+4. Install `newton`'s dependencies
+```
+yarn
+```
 5. Install `newton` as a global package
 ```
 npm install -g
 ```
-5. Check that the latest version of `newton` is installed
+6. Check that the latest version of `newton` is installed
 ```
 npx newton --version
 ```
