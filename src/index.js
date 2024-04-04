@@ -262,6 +262,7 @@ async function configure_api() {
           process.exit(1);
         }
         if (package_path) {
+          spinner.succeed(`Found a valid ${config.indicator}`);
           let responses = await parse_entrypoint(config, package_path, answers.baseUrl);
           spinner = ora('Writing API documentation').start();
           spinner.color = 'blue';
