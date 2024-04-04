@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { md_handler, html_handler } from './utils/transmogrify.js';
-import { talk_to_ai } from './utils/ai.js';
+import { craft_prompt } from './utils/ai.js';
 import inquirer from 'inquirer';
 import ora from 'ora';
 
@@ -49,56 +49,110 @@ async function parse_path(directory, target = 'package.json') {
   return undefined;
 }
 
-async function parse_entrypoint(package_path, base_url) {
-  let spinner = ora('Reading package.json for a project entrypoint').start();
+async function parse_entrypoint(config, package_path, base_url) {
+  let spinner = ora();
   spinner.color = 'blue';
-  try {
+  let entrypoint = config.entrypoint, entrypoint_path = '';
+  if (config.language === "JavaScript") {
+    spinner = ora('Reading package.json for a project entrypoint').start();
     const file = await fs.readFile(package_path, 'utf8');
-    const entrypoint = JSON.parse(file).main;
+    entrypoint = JSON.parse(file).main;
     if (!entrypoint) {
       // console.log('No entrypoint found');
       spinner.fail('No entrypoint found in package.json (main field)');
       process.exit(1);
     }
     // console.log('Entrypoint:', entrypoint);
-    const entrypoint_path = path.join(path.dirname(package_path), entrypoint);
+    entrypoint_path = path.join(path.dirname(package_path), entrypoint);
     spinner.succeed('Found a valid entrypoint at ' + entrypoint_path);
+  } else if (config.language === "Python") { }
+  try {
+    if (entrypoint_path === '') {
+      entrypoint_path = package_path;
+    }
     spinner = ora('Reading entrypoint for API endpoints').start();
     const data = await fs.readFile(entrypoint_path, 'utf8');
     // console.log('Data:', data);
-    let fn = false;
+    let is_capturing = false;
     let content = '';
     let responses = [];
     let endpoint = '';
     let has_endpoint = false;
     for (let line of data.split('\n')) {
-      if (fn) {
-        content += line + '\n';
-        if (line === '});' || line === '})') {
-          if (!has_endpoint) {
-            spinner.succeed('Found at least one API endpoint');
-            has_endpoint = true;
+      if (config.language === "JavaScript") {
+        if (is_capturing) {
+          content += line + '\n';
+          if (line === '});' || line === '})') {
+            if (!has_endpoint) {
+              spinner.succeed('Found at least one API endpoint');
+              has_endpoint = true;
+            }
+            spinner = ora('Talking to AI for documentation on ' + endpoint).start();
+            let message = await craft_prompt(config.framework, base_url, content);
+            if (message == null) {
+              spinner.info('Received an invalid response from the AI, automatically retrying...');
+              spinner = ora('Talking to AI').start();
+              message = await craft_prompt(config.framework, base_url, content);
+            } else {
+              spinner.succeed('AI has responded for ' + endpoint);
+              responses.push(message);
+            }
+            is_capturing = false;
+            content = '';
           }
-          // handle multiple return values from talk_to_ai namely message and spinner
-          spinner = ora('Talking to AI for documentation on ' + endpoint).start();
-          let message = await talk_to_ai(base_url, content);
-          if (message == null) {
-            spinner.info('Received an invalid response from the AI, automatically retrying...');
-            spinner = ora('Talking to AI').start();
-            message = await talk_to_ai(base_url, content);
-          } else {
-            spinner.succeed('AI has responded for ' + endpoint);
-            responses.push(message);
-          }
-          fn = false;
-          content = '';
+        } else if (line.match(/app\.(get|post|put|delete)\(/)) {
+          is_capturing = true;
+          endpoint = line;
+          content = line + '\n';
         }
-      } else if (line.match(/app\.(get|post|put|delete)\(/)) {
-        fn = true;
-        endpoint = line;
-        content = line + '\n';
+      } else if (config.language === "Python") {
+        if (line.trim().startsWith('@app.route')) {
+          if (is_capturing) {
+            if (!has_endpoint) {
+              spinner.succeed('Found at least one API endpoint');
+              has_endpoint = true;
+            }
+            spinner = ora('Talking to AI for documentation on ' + endpoint).start();
+            let message = await craft_prompt(config.framework, base_url, content);
+            // console.log('Message:', message);
+            if (message == null) {
+              spinner.info('Received an invalid response from the AI, automatically retrying...');
+              spinner = ora('Talking to AI').start();
+              message = await craft_prompt(config.framework, base_url, content);
+            } else {
+              spinner.succeed('AI has responded for ' + endpoint);
+              responses.push(message);
+            }
+            content = '';
+          }
+          is_capturing = true;
+          endpoint = line.trim();
+        }
+        if (is_capturing) {
+          content += line + '\n';
+        }
       }
     }
+    if (config.language === "Python" && is_capturing && content) {
+      // endpointContents.push(content);
+      let endpoint = content.indexOf('@app.route');
+      endpoint = content.substring(endpoint, content.indexOf('\n', endpoint));
+      // console.log('Endpoint:', endpoint);
+      if (!has_endpoint) {
+        spinner.succeed('Found at least one API endpoint');
+        has_endpoint = true;
+      }
+      spinner = ora('Talking to AI for documentation on ' + endpoint).start();
+      let message = await craft_prompt(config.framework, base_url, content);
+      if (message == null) {
+        spinner.info('Received an invalid response from the AI, automatically retrying...');
+        spinner = ora('Talking to AI').start();
+        message = await craft_prompt(config.framework, base_url, content);
+      } else {
+        spinner.succeed('AI has responded for ' + endpoint);
+        responses.push(message);
+      }
+    }    
     // console.log('Responses:', responses);
     if (spinner.isSpinning) {
       spinner.succeed('AI has responded');
@@ -106,7 +160,7 @@ async function parse_entrypoint(package_path, base_url) {
     return responses;
   } catch (error) {
     spinner.fail('An unknown error occurred while reading the entrypoint or talking to AI');
-    // console.error("Error:", error);
+    console.error("Error:", error);
     process.exit(1);
   }
 }
@@ -123,6 +177,13 @@ async function parse_entrypoint(package_path, base_url) {
         default: '.'
       },
       {
+        type: 'list',
+        name: 'framework',
+        message: 'Select the framework your project uses:',
+        default: 'Express.js (JavaScript)',
+        choices: ['Express.js (JavaScript)', 'Flask (Python)']
+      },
+      {
         type: 'input',
         name: 'baseUrl',
         message: 'Enter the base URL for your API:',
@@ -136,17 +197,32 @@ async function parse_entrypoint(package_path, base_url) {
         choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)']
       }
     ]).then(async answers => {
+      const input = {
+        "Express.js (JavaScript)": {
+          indicator: "package.json",
+          entrypoint: "index.js",
+          language: "JavaScript",
+          framework: "Express.js (JavaScript)"
+        },
+        "Flask (Python)": {
+          indicator: "app.py",
+          entrypoint: "app.py",
+          language: "Python",
+          framework: "Flask (Python)"
+        }
+      };
+      const config = input[answers.framework];
+
       console.log("\n");
-      let spinner = ora('Looking for a valid package.json').start();
+      let spinner = ora(`Looking for a valid ${config.indicator}`).start();
       spinner.color = 'blue';
-      const [package_path] = await parse_path(answers.path);
+      const [package_path] = await parse_path(answers.path, config.indicator);
       if (package_path === undefined) {
-        spinner.fail('No package.json found');
+        spinner.fail(`No ${config.indicator} found`);
         process.exit(1);
       }
       if (package_path) {
-        spinner.succeed('Found a valid package.json');
-        let responses = await parse_entrypoint(package_path, answers.baseUrl);
+        let responses = await parse_entrypoint(config, package_path, answers.baseUrl);
         spinner = ora('Writing API documentation').start();
         spinner.color = 'blue';
         const output = path.join(answers.path, 'api-documentation.json');
