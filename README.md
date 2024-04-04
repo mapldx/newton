@@ -3,6 +3,9 @@
 
 ## While in beta...
 ### Versions covered
+- `1.0.1`:
+    - add support for Flask (Python) projects
+    - allow user to specify their own OpenAI API key for saved locally for persistent use
 - `1.0.0`: add functionality to generate documentation in JSON, Markdown, and HTML for Express.js (Node.js) APIs using GPT-3.5 Turbo
 
 ### Set up
@@ -14,21 +17,17 @@ git clone https://github.com/mapldx/newton.git
 ```
 cd newton
 ```
-3. Specify an `OPENAI_API_KEY` with funds or credits in a `.env` file, e.g.
-```
-echo "OPENAI_API_KEY=sk-123" > .env
-```
-4. Install `newton`'s dependencies
+3. Install `newton`'s dependencies
 ```
 yarn
 ```
-5. Install `newton` as a global package
+4. Install `newton` as a global package
 ```
 npm install -g
 ```
-6. Check that the latest version of `newton` is installed
+5. Perform first time set up by configuring `newton` with an OpenAI API key that has billing set up
 ```
-npx newton --version
+npx newton
 ```
 
 ### Usage
