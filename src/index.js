@@ -6,6 +6,7 @@ import path from 'path';
 import OpenAI from 'openai';
 import 'dotenv/config';
 import { md_handler, html_handler } from './utils/transmogrify.js';
+import inquirer from 'inquirer';
 
 const program = new Command();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -109,26 +110,77 @@ async function talk_to_ai(base_url, data) {
 }
 
 (async () => {
-  const [package_path] = await parse_path(options.path);
-  if (package_path) {
-    let responses = await parse_entrypoint(package_path, options.baseUrl);
-    // console.log('Responses:', responses);
-    const output = path.join(options.path, 'api-documentation.json');
-    // console.log('Output:', output);
-    await fs.writeFile(output, JSON.stringify(responses, null, 2));
-    console.log('API documentation generated successfully');
-    if (options.target) {
-      console.log('Target format:', options.target);
-      if (options.target === "md") {
-        await md_handler(output, options.path);
-      } else if (options.target === "html") {
-        await html_handler(output, options.path);
+  if (process.argv.length == 2) {
+    console.log('Starting in interactive mode...\n');
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'path',
+        message: 'Enter the path to your project directory:',
+        default: '.'
+      },
+      {
+        type: 'input',
+        name: 'baseUrl',
+        message: 'Enter the base URL for your API:',
+        default: 'http://localhost:3000'
+      },
+      {
+        type: 'list',
+        name: 'target',
+        message: 'Select the target format for the documentation:',
+        default: 'JSON (.json)',
+        choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)']
+      }
+    ]).then(async answers => {
+      const [package_path] = await parse_path(answers.path);
+      if (package_path) {
+        let responses = await parse_entrypoint(package_path, answers.baseUrl);
+        const output = path.join(answers.path, 'api-documentation.json');
+        await fs.writeFile(output, JSON.stringify(responses, null, 2));
+        console.log('API documentation generated successfully');
+        if (answers.target) {
+          console.log('Target format:', answers.target);
+          if (answers.target === "Markdown (.md)") {
+            await md_handler(output, answers.path);
+          } else if (answers.target === "Simple HTML (.html)") {
+            await html_handler(output, answers.path);
+          } else if (answers.target === "JSON (.json)") {
+            console.log('JSON output saved to:', output);
+          }
+        } else {
+          console.log('No target format specified');
+          process.exit(1);
+        }
+      } else {
+        console.log('package.json not found');
+      }
+    });
+  } else if (process.argv.length > 2) {
+    if (process.argv.length < 6) {
+      program.help();
+    }
+    const [package_path] = await parse_path(options.path);
+    if (package_path) {
+      let responses = await parse_entrypoint(package_path, options.baseUrl);
+      const output = path.join(options.path, 'api-documentation.json');
+      await fs.writeFile(output, JSON.stringify(responses, null, 2));
+      console.log('API documentation generated successfully');
+      if (options.target) {
+        console.log('Target format:', options.target);
+        if (options.target === "Markdown (.md)") {
+          await md_handler(output, options.path);
+        } else if (options.target === "Simple HTML (.html)") {
+          await html_handler(output, options.path);
+        } else if (options.target === "JSON (.json)") {
+          console.log('JSON output saved to:', output);
+        }
+      } else {
+        console.log('No target format specified');
+        process.exit(1);
       }
     } else {
-      console.log('No target format specified');
-      process.exit(1);
+      console.log('package.json not found');
     }
-  } else {
-    console.log('package.json not found');
   }
 })();
