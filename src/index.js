@@ -62,7 +62,7 @@ async function parse_entrypoint(package_path, base_url) {
     for (let line of data.split('\n')) {
       if (fn) {
         content += line + '\n';
-        if (line === '});') {
+        if (line === '});' || line === '})') {
           responses.push(await talk_to_ai(base_url, content + '});'));
           fn = false;
           content = '';
