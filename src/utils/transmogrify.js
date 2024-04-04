@@ -158,7 +158,7 @@ async function md_handler(json_file, save_path) {
   }
   let output = path.join(save_path, 'api-documentation.md');
   await fs.writeFile(output, markdown);
-  console.log('Documentation generated successfully!');
+  // console.log('Documentation generated successfully!');
 }
 
 async function html_handler(json_file, save_path) {
@@ -169,7 +169,7 @@ async function html_handler(json_file, save_path) {
   }
   let output = path.join(save_path, 'api-documentation.html');
   await fs.writeFile(output, html);
-  console.log('Documentation generated successfully!');
+  // console.log('Documentation generated successfully!');
 }
 
 // export the md and html handlers
