@@ -1,9 +1,8 @@
 import { OpenAI } from 'openai';
 import 'dotenv/config';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-async function talk_to_ai(payload) {
+async function talk_to_ai(payload, OPENAI_API_KEY) {
+    const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
     const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
@@ -33,7 +32,7 @@ async function talk_to_ai(payload) {
     return message;
 }
 
-async function craft_prompt(framework, base_url, data) {
+async function craft_prompt(framework, base_url, data, OPENAI_API_KEY) {
     const input = {
         "Express.js (JavaScript)": {
             entrypoint: "index.js",
@@ -55,7 +54,7 @@ async function craft_prompt(framework, base_url, data) {
             data
         };
         // console.log("Payload: ", payload);
-        let response = await talk_to_ai(payload);
+        let response = await talk_to_ai(payload, OPENAI_API_KEY);
         return response;
     } else {
         return null;

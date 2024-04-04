@@ -7,6 +7,7 @@ import { md_handler, html_handler } from './utils/transmogrify.js';
 import { craft_prompt } from './utils/ai.js';
 import inquirer from 'inquirer';
 import ora from 'ora';
+import util from 'util';
 
 const program = new Command();
 process.removeAllListeners('warning');
@@ -23,6 +24,7 @@ program
 
 program.parse(process.argv);
 const options = program.opts();
+let OPENAI_API_KEY = '';
 
 async function parse_path(directory, target = 'package.json') {
   // let spinner = ora('Looking for a valid package.json').start();
@@ -88,11 +90,11 @@ async function parse_entrypoint(config, package_path, base_url) {
               has_endpoint = true;
             }
             spinner = ora('Talking to AI for documentation on ' + endpoint).start();
-            let message = await craft_prompt(config.framework, base_url, content);
+            let message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
             if (message == null) {
               spinner.info('Received an invalid response from the AI, automatically retrying...');
               spinner = ora('Talking to AI').start();
-              message = await craft_prompt(config.framework, base_url, content);
+              message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
             } else {
               spinner.succeed('AI has responded for ' + endpoint);
               responses.push(message);
@@ -113,12 +115,12 @@ async function parse_entrypoint(config, package_path, base_url) {
               has_endpoint = true;
             }
             spinner = ora('Talking to AI for documentation on ' + endpoint).start();
-            let message = await craft_prompt(config.framework, base_url, content);
+            let message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
             // console.log('Message:', message);
             if (message == null) {
               spinner.info('Received an invalid response from the AI, automatically retrying...');
               spinner = ora('Talking to AI').start();
-              message = await craft_prompt(config.framework, base_url, content);
+              message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
             } else {
               spinner.succeed('AI has responded for ' + endpoint);
               responses.push(message);
@@ -143,16 +145,16 @@ async function parse_entrypoint(config, package_path, base_url) {
         has_endpoint = true;
       }
       spinner = ora('Talking to AI for documentation on ' + endpoint).start();
-      let message = await craft_prompt(config.framework, base_url, content);
+      let message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
       if (message == null) {
         spinner.info('Received an invalid response from the AI, automatically retrying...');
         spinner = ora('Talking to AI').start();
-        message = await craft_prompt(config.framework, base_url, content);
+        message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
       } else {
         spinner.succeed('AI has responded for ' + endpoint);
         responses.push(message);
       }
-    }    
+    }
     // console.log('Responses:', responses);
     if (spinner.isSpinning) {
       spinner.succeed('AI has responded');
@@ -165,91 +167,130 @@ async function parse_entrypoint(config, package_path, base_url) {
   }
 }
 
+async function configure_api() {
+  let api_path;
+  try {
+    api_path = path.join(process.env.HOME, '.newton');
+    await fs.access(api_path, fs.constants.F_OK);
+    OPENAI_API_KEY = await fs.readFile(api_path, 'utf8');
+  } catch (err) {
+    // spinner.fail('No OpenAI API key found, enter one to continue');
+    const answers = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'api_key',
+        message: 'No OpenAI API key found, enter one to continue:',
+        validate: function (value) {
+          if (value.length) {
+            value = value.trim();
+            OPENAI_API_KEY = value;
+            return true;
+          } else {
+            return 'An OpenAI API key is required for Newton to work properly';
+          }
+        }
+      }
+    ]);
+    await fs.writeFile(api_path, answers.api_key);
+    console.log('\nOpenAI API key saved successfully to ' + api_path + '. This key:\n');
+    console.log('(0) needs to be funded or have credits for Newton to work properly');
+    console.log('(1) only needs to be entered once (which means you won\'t need to do this set up again)');
+    console.log('(2) is strictly stored locally on your machine and is not shared with anyone');
+    console.log('(3) will be used for all future Newton requests');
+    console.log('(4) can be changed or removed by modifying the file at ' + api_path);
+    console.log('\nLet\'s get started!\n');
+  }
+}
+
 (async () => {
   if (process.argv.length == 2) {
     console.log('🦊 newton – a CLI that creates your API documentation for you with AI');
+    console.log('\n');
     // console.log('Starting in interactive mode...\n');
-    inquirer.prompt([
-      {
-        type: 'input',
-        name: 'path',
-        message: 'Enter the path to your project directory:',
-        default: '.'
-      },
-      {
-        type: 'list',
-        name: 'framework',
-        message: 'Select the framework your project uses:',
-        default: 'Express.js (JavaScript)',
-        choices: ['Express.js (JavaScript)', 'Flask (Python)']
-      },
-      {
-        type: 'input',
-        name: 'baseUrl',
-        message: 'Enter the base URL for your API:',
-        default: 'http://localhost:3000'
-      },
-      {
-        type: 'list',
-        name: 'target',
-        message: 'Select the target format for the documentation:',
-        default: 'JSON (.json)',
-        choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)']
-      }
-    ]).then(async answers => {
-      const input = {
-        "Express.js (JavaScript)": {
-          indicator: "package.json",
-          entrypoint: "index.js",
-          language: "JavaScript",
-          framework: "Express.js (JavaScript)"
+    // let spinner = ora('Configuring...').start();
+    configure_api().then(() => {
+      inquirer.prompt([
+        {
+          type: 'input',
+          name: 'path',
+          message: 'Enter the path to your project directory:',
+          default: '.'
         },
-        "Flask (Python)": {
-          indicator: "app.py",
-          entrypoint: "app.py",
-          language: "Python",
-          framework: "Flask (Python)"
+        {
+          type: 'list',
+          name: 'framework',
+          message: 'Select the framework your project uses:',
+          default: 'Express.js (JavaScript)',
+          choices: ['Express.js (JavaScript)', 'Flask (Python)']
+        },
+        {
+          type: 'input',
+          name: 'baseUrl',
+          message: 'Enter the base URL for your API:',
+          default: 'http://localhost:3000'
+        },
+        {
+          type: 'list',
+          name: 'target',
+          message: 'Select the target format for the documentation:',
+          default: 'JSON (.json)',
+          choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)']
         }
-      };
-      const config = input[answers.framework];
-
-      console.log("\n");
-      let spinner = ora(`Looking for a valid ${config.indicator}`).start();
-      spinner.color = 'blue';
-      const [package_path] = await parse_path(answers.path, config.indicator);
-      if (package_path === undefined) {
-        spinner.fail(`No ${config.indicator} found`);
-        process.exit(1);
-      }
-      if (package_path) {
-        let responses = await parse_entrypoint(config, package_path, answers.baseUrl);
-        spinner = ora('Writing API documentation').start();
-        spinner.color = 'blue';
-        const output = path.join(answers.path, 'api-documentation.json');
-        await fs.writeFile(output, JSON.stringify(responses, null, 2));
-        // spinner.succeed('Successfully written default JSON output to + ' + output);
-        // console.log('API documentation generated successfully');
-        if (answers.target) {
-          // console.log('Target format:', answers.target);
-          // if (answers.target !== "JSON (.json)") {
-          //   spinner = ora('Transmogrifying API documentation to ' + answers.target).start();
-          // }
-          if (answers.target === "Markdown (.md)") {
-            await md_handler(output, answers.path);
-          } else if (answers.target === "Simple HTML (.html)") {
-            await html_handler(output, answers.path);
-          } else if (answers.target === "JSON (.json)") {
-            // console.log('JSON output saved to:', output);
+      ]).then(async answers => {
+        const input = {
+          "Express.js (JavaScript)": {
+            indicator: "package.json",
+            entrypoint: "index.js",
+            language: "JavaScript",
+            framework: "Express.js (JavaScript)"
+          },
+          "Flask (Python)": {
+            indicator: "app.py",
+            entrypoint: "app.py",
+            language: "Python",
+            framework: "Flask (Python)"
           }
-          spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
-        } else {
-          console.log('No target format specified');
+        };
+        const config = input[answers.framework];
+  
+        console.log("\n");
+        let spinner = ora(`Looking for a valid ${config.indicator}`).start();
+        spinner.color = 'blue';
+        const [package_path] = await parse_path(answers.path, config.indicator);
+        if (package_path === undefined) {
+          spinner.fail(`No ${config.indicator} found`);
           process.exit(1);
         }
-      } else {
-        console.log('package.json not found');
-      }
-    });
+        if (package_path) {
+          let responses = await parse_entrypoint(config, package_path, answers.baseUrl);
+          spinner = ora('Writing API documentation').start();
+          spinner.color = 'blue';
+          const output = path.join(answers.path, 'api-documentation.json');
+          await fs.writeFile(output, JSON.stringify(responses, null, 2));
+          // spinner.succeed('Successfully written default JSON output to + ' + output);
+          // console.log('API documentation generated successfully');
+          if (answers.target) {
+            // console.log('Target format:', answers.target);
+            // if (answers.target !== "JSON (.json)") {
+            //   spinner = ora('Transmogrifying API documentation to ' + answers.target).start();
+            // }
+            if (answers.target === "Markdown (.md)") {
+              await md_handler(output, answers.path);
+            } else if (answers.target === "Simple HTML (.html)") {
+              await html_handler(output, answers.path);
+            } else if (answers.target === "JSON (.json)") {
+              // console.log('JSON output saved to:', output);
+            }
+            spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
+          } else {
+            console.log('No target format specified');
+            process.exit(1);
+          }
+        } else {
+          console.log('package.json not found');
+        }
+      });
+    }).catch(console.error);
   } else if (process.argv.length > 2) {
     // if (process.argv.length < 6) {
     //   program.help();
