@@ -4,7 +4,11 @@ import path from 'path';
 async function generate_md(endpoints) {
   let markdown = "";
   
+  if (endpoints == null) {
+    return;
+  }
   await endpoints.forEach(endpoint => {
+
     markdown += `## ${endpoint.endpoint_title}\n\n`;
     markdown += `- **Description:** ${endpoint.endpoint_description}\n`;
     markdown += `- **URL:** \`${endpoint.endpoint_url}\`\n`;
@@ -75,6 +79,9 @@ async function generate_md(endpoints) {
 async function generate_html(endpoints) {
   let html = "";
   
+  if (endpoints == null) {
+    return;
+  }
   await endpoints.forEach(endpoint => {
     html += `<h2>${endpoint.endpoint_title}</h2>\n\n`;
     html += `<p><strong>Description:</strong> ${endpoint.endpoint_description}</p>\n`;
