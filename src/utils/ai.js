@@ -22,13 +22,15 @@ async function talk_to_ai(base_url, data) {
         frequency_penalty: 0,
         presence_penalty: 0,
     });
+    let message;
     try {
-        return response.choices.map(choice => JSON.parse(choice.message.content));
+        message = response.choices.map(choice => JSON.parse(choice.message.content));
     } catch (error) {
-        // console.error("Error:", error);
-        console.error("Error: received an invalid response from the AI, automatically retrying...");
-        talk_to_ai(base_url, data);
+        // console.log("Error: ", error);
+        // console.log("\n");
+        return null;
     }
+    return message;
 }
 
 export { talk_to_ai };
