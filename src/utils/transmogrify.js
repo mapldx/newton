@@ -234,8 +234,13 @@ async function next_handler(json_file, save_path, base_url) {
     console.log("\n");
     console.log("To build your Next.js generated site:\n");
     console.log("cd " + target);
+    console.log("rm -rf node_modules/ package-lock.json yarn.lock");
     console.log("yarn");
     console.log("yarn build && yarn start");
+    console.log("\n");
+    console.log("To make changes to the contents of your site:\n");
+    console.log("(1) Open in your favorite text editor " + target + "/src/app/newton/api-documentation.json");
+    console.log("(2) Simply refreshing the page will reflect the changes you made to the JSON file");
   });
 }
 
