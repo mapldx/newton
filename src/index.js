@@ -50,7 +50,6 @@ async function parse_path(directory, target = 'package.json') {
   return undefined;
 }
 
-let i = 0;
 async function parse_entrypoint(config, package_path, base_url) {
   let spinner = ora();
   spinner.color = 'blue';
@@ -91,11 +90,9 @@ async function parse_entrypoint(config, package_path, base_url) {
             }
             spinner = ora('Talking to AI for documentation on ' + endpoint).start();
             let message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
-            i++;
-            if (i == 3) message = null;
             if (message == null) {
               spinner.info('Received an invalid response from the AI, automatically retrying...');
-              // spinner = ora('Talking to AI').start();
+              spinner = ora('Talking to AI for documentation on ' + endpoint).start();
               message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
             } else {
               spinner.succeed('AI has responded for ' + endpoint);
