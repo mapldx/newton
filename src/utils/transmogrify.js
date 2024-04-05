@@ -188,7 +188,7 @@ async function copy_folder(source, target) {
     const targetPath = path.join(target, item.name);
 
     if (item.isDirectory()) {
-      await copyFolderRecursive(srcPath, targetPath);
+      await copy_folder(srcPath, targetPath);
     } else {
       await fs.copyFile(srcPath, targetPath);
     }
