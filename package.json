@@ -1,7 +1,7 @@
 {
   "name": "newton",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.2",
+  "description": "A CLI that creates your API documentation for you with AI.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,8 +9,27 @@
   "bin": {
     "newton": "./src/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "homepage": "https://github.com/mapldx/newton/blob/main/README.md",
+  "keywords": [
+    "newton",
+    "ai",
+    "api",
+    "docs",
+    "documentation",
+    "express",
+    "expressjs",
+    "express.js",
+    "flask",
+    "openai"
+  ],
+  "author": "Zachary Will Sy (@mapldx)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapldx/newton"
+  },
+  "files": [
+    "src"
+  ],
   "license": "ISC",
   "type": "module",
   "dependencies": {
