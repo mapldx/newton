@@ -58,7 +58,6 @@ async function parse_entrypoint(config, package_path, base_url) {
     spinner = ora('Reading package.json for a project entrypoint').start();
     const file = await fs.readFile(package_path, 'utf8');
     entrypoint = JSON.parse(file).main;
-    console.log(file);
     if (!entrypoint) {
       // console.log('No entrypoint found');
       spinner.fail('No entrypoint found in package.json (main field)');
