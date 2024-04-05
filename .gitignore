@@ -131,3 +131,5 @@ dist
 
 # newton generated files
 src/lib/src/app/newton
+
+.DS_Store
