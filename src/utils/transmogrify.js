@@ -206,6 +206,13 @@ async function next_handler(json_file, save_path, base_url) {
       name: 'title',
       message: 'Enter your generated site title:',
       default: `${path.basename(save_path)} API Documentation`
+    },
+    {
+      type: 'list',
+      name: 'dark_mode',
+      message: 'Select your preferred color mode:',
+      choices: ['Light', 'Dark'],
+      default: ['Light']
     }
   ]).then(async (answers) => {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -220,6 +227,7 @@ async function next_handler(json_file, save_path, base_url) {
     meta_parameters = meta_parameters.replace('Example API', answers.title);
     meta_parameters = meta_parameters.replace('https://api.example.com', base_url);
     meta_parameters = meta_parameters.replace('Thu, 01 Jan 1970', new Date().toLocaleDateString());
+    meta_parameters = meta_parameters.replace('"null"', answers.dark_mode.includes('Dark') ? true : false);
     await fs.writeFile(path.join(target, 'src/app/newton/meta-parameters.json'), meta_parameters);
     // console.log('Documentation generated successfully!');
     spinner.succeed('Successfully transmogrified API documentation to Next.js Site (.js)');
