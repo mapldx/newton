@@ -37,7 +37,7 @@ async function parse_path(directory, target = 'package.json') {
   // console.log('Checking path', directory);
   const files = await fs.readdir(directory, { withFileTypes: true });
   for (const file of files) {
-    if (file.isDirectory() && file.name !== 'node_modules') {
+    if (file.isDirectory() && file.name !== 'node_modules' && (file.name).startsWith('.') === false && (file.name).startsWith('newton') === false) {
       const result = await parse_path(path.join(directory, file.name), target);
       if (result) {
         return result;
