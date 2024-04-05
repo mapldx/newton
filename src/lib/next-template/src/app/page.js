@@ -10,6 +10,9 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [titles, setTitles] = useState([]);
   const [baseUrl, setBaseUrl] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredTitles, setFilteredTitles] = useState([]);
+
   useEffect(() => {
     let titles = [];
     data.flatMap((endpoint) => {
@@ -20,6 +23,13 @@ export default function Home() {
     setTitles(titles);
     setIsLoaded(true);
   }, []);
+
+  useEffect(() => {
+    const filtered = titles.filter(title =>
+      title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredTitles(filtered);
+  }, [searchQuery, titles]);
 
   return (
     <>
@@ -32,13 +42,41 @@ export default function Home() {
                   <h1 class="text-2xl font-bold text-white sm:text-3xl">{baseUrl} API</h1>
                   <p class="mt-1.5 text-sm text-white">Generated on {parameters.DATE_GENERATED}</p>
                 </div>
-                {/* <div class="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-                  <input
-                    type="text"
-                    class="block w-full rounded-lg text-gray-800 p-3 shadow-sm sm:max-w-xs sm:text-sm border border-gray-400 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Search..."
-                  />
-                </div> */}
+                <div class="relative mt-4 sm:mt-0 sm:flex-row sm:items-center">
+                  <div class="inline-flex items-center overflow-hidden rounded-md border bg-white w-full">
+                    <input
+                      type="text"
+                      class="block w-full rounded-lg text-gray-800 p-3 sm:max-w-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  {searchQuery && (
+                    <div
+                      class="absolute end-0 z-10 mt-2 rounded-md border border-gray-100 bg-white shadow-lg w-full"
+                      role="menu"
+                    >
+                      <div class="p-2">
+                        {filteredTitles.map((title, index) => (
+                          <a key={index}
+                            class="block w-full rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                            role="menu"
+                            href={`#${title.replace(' ', '-')}`}
+                            onClick={() => setSearchQuery('')}
+                          >
+                            {title}
+                          </a>
+                        ))}
+                        {filteredTitles.length === 0 && (
+                          <div class="px-4 py-2 text-sm text-gray-500">
+                            No results found.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </header>
