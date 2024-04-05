@@ -1,6 +1,14 @@
-<p align="center"><img src="https://raw.githubusercontent.com/mapldx/newton/main/examples/cover-example.png?token=GHSAT0AAAAAACMLWUJZGJYYDG55XVXQKAK6ZQPZEBQ"></p>
-<h1><p align="center">🦊 newton</p></h1>
-<p align="center">A CLI that creates your API documentation for you with AI.</p>
+<div align="center">
+    <div>
+        <img src="https://raw.githubusercontent.com/mapldx/newton/main/examples/cover-example.png?token=GHSAT0AAAAAACMLWUJZGJYYDG55XVXQKAK6ZQPZEBQ"/>
+        <h1 align="center">🦊 newton</h1>
+    </div>
+	<p>A CLI that creates your API documentation for you with AI</p>
+	<a href="https://www.npmjs.com/package/newton-aidocs">
+        <img alt="NPM Version" src="https://img.shields.io/npm/v/newton-aidocs">
+    </a>
+    <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/mapldx/newton">
+</div>
 
 ## Examples
 ### Node.js (Express) project 
@@ -55,7 +63,19 @@ _[showing steps in process]_
 </details>
 
 ## While in beta...
+### Set up
+1. Install `newton` globally
+```
+npm install -g newton-aidocs
+```
+2. Perform first time set up by configuring `newton` with an OpenAI API key that has billing set up
+```
+npx newton
+```
+
 ### Versions covered
+- `1.0.3`:
+    - semver compliant `npm publish` for first public release while in beta
 - `1.0.2`:
     - add functionality to export generated documentation to responsive Next.js site
     - add tab autocompletion for specifying project directory path
@@ -63,28 +83,6 @@ _[showing steps in process]_
     - add support for Flask (Python) projects
     - allow user to specify their own OpenAI API key for saved locally for persistent use
 - `1.0.0`: add functionality to generate documentation in JSON, Markdown, and HTML for Express.js (Node.js) APIs using GPT-3.5 Turbo
-
-### Set up
-1. Clone the repo
-```
-git clone https://github.com/mapldx/newton.git
-```
-2. Navigate to the directory
-```
-cd newton
-```
-3. Install `newton`'s dependencies
-```
-yarn
-```
-4. Install `newton` as a global package
-```
-npm install -g
-```
-5. Perform first time set up by configuring `newton` with an OpenAI API key that has billing set up
-```
-npx newton
-```
 
 ### Usage
 ```

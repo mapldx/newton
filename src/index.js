@@ -16,7 +16,7 @@ inquirer.registerPrompt('path', PathPrompt);
 program
   .name('newton')
   .description('A CLI that creates your API documentation for you with AI')
-  .version('1.0.0');
+  .version('1.0.3');
 
 // program
 //   .option('-p, --path <path>', 'Path to your project directory')
