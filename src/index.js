@@ -18,10 +18,8 @@ program
   .description('A CLI that creates your API documentation for you with AI')
   .version('1.0.3');
 
-// program
-//   .option('-p, --path <path>', 'Path to your project directory')
-//   .option('-b, --base-url <url>', 'Base URL for your API')
-//   .option('-t, --target <format>', 'Target format for the documentation');
+program
+  .option('-t, --transmogrify-only', 'Transmogrify existing API documentation')
 
 program.parse(process.argv);
 const options = program.opts();
@@ -52,6 +50,7 @@ async function parse_path(directory, target = 'package.json') {
   return undefined;
 }
 
+let i = 0;
 async function parse_entrypoint(config, package_path, base_url) {
   let spinner = ora();
   spinner.color = 'blue';
@@ -92,9 +91,11 @@ async function parse_entrypoint(config, package_path, base_url) {
             }
             spinner = ora('Talking to AI for documentation on ' + endpoint).start();
             let message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
+            i++;
+            if (i == 3) message = null;
             if (message == null) {
               spinner.info('Received an invalid response from the AI, automatically retrying...');
-              spinner = ora('Talking to AI').start();
+              // spinner = ora('Talking to AI').start();
               message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
             } else {
               spinner.succeed('AI has responded for ' + endpoint);
@@ -254,65 +255,7 @@ async function configure_api() {
           }
         };
         const config = input[answers.framework];
-        try {
-          await fs.access(path.join(answers.path, 'api-documentation.json'), fs.constants.F_OK);
-          console.log('! newton-generated API documentation has been found in this directory (api-documentation.json))');
-          await inquirer.prompt([
-            {
-              type: 'confirm',
-              name: 'overwrite',
-              message: 'Would you like to overwrite it?',
-              default: false
-            }
-          ]).then(async response => {
-            if (response.overwrite) {
-            } else {
-              await inquirer.prompt([
-                {
-                  type: 'confirm',
-                  name: 'continue',
-                  message: 'Would you like to transmogrify the existing API documentation?',
-                  default: true
-                }
-              ]).then(async response => {
-                if (!response.continue) {
-                  process.exit(0);
-                } else {
-                  await inquirer.prompt([
-                    {
-                      type: 'list',
-                      name: 'target',
-                      message: 'Select the target format for the documentation:',
-                      default: 'JSON (.json)',
-                      choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)', 'Next.js Site (.js)']
-                    }
-                  ]).then(async response => {
-                    let spinner = ora('Transmogrifying API documentation to ' + response.target).start();
-                    const output = path.join(answers.path, 'api-documentation.json');
-                    if (response.target === "Markdown (.md)") {
-                      await md_handler(output, answers.path);
-                      spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
-                      process.exit(0);
-                    } else if (response.target === "Simple HTML (.html)") {
-                      await html_handler(output, answers.path);
-                      spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
-                      process.exit(0);
-                    } else if (response.target === "JSON (.json)") {
-                      console.log('JSON output saved to:', output);
-                      spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
-                      process.exit(0);
-                    } else if (response.target === "Next.js Site (.js)") {
-                      spinner.info('Transmogrifying to a Next.js site needs a little information from you...');
-                      await next_handler(output, answers.path, answers.baseUrl);
-                      process.exit(0);
-                    }
-                  });
-                }
-              });
-            }
-          });
-        } catch (err) {
-        }
+
         console.log("\n");
         let spinner = ora(`Looking for a valid ${config.indicator}`).start();
         spinner.color = 'blue';
@@ -359,30 +302,48 @@ async function configure_api() {
       });
     }).catch(console.error);
   } else if (process.argv.length > 2) {
-    // if (process.argv.length < 6) {
-    //   program.help();
-    // }
-    // const [package_path] = await parse_path(options.path);
-    // if (package_path) {
-    //   let responses = await parse_entrypoint(package_path, options.baseUrl);
-    //   const output = path.join(options.path, 'api-documentation.json');
-    //   await fs.writeFile(output, JSON.stringify(responses, null, 2));
-    //   console.log('API documentation generated successfully');
-    //   if (options.target) {
-    //     console.log('Target format:', options.target);
-    //     if (options.target === "Markdown (.md)") {
-    //       await md_handler(output, options.path);
-    //     } else if (options.target === "Simple HTML (.html)") {
-    //       await html_handler(output, options.path);
-    //     } else if (options.target === "JSON (.json)") {
-    //       console.log('JSON output saved to:', output);
-    //     }
-    //   } else {
-    //     console.log('No target format specified');
-    //     process.exit(1);
-    //   }
-    // } else {
-    //   console.log('package.json not found');
-    // }
+    if (options.transmogrifyOnly) {
+      inquirer.prompt([
+        {
+          type: 'path',
+          name: 'path',
+          message: 'Enter the path to your project directory (tab to complete):',
+          directoryOnly: true,
+          default: '.',
+        },
+      ]).then(async answers => {
+        try {
+          await fs.access(path.join(answers.path, 'api-documentation.json'), fs.constants.F_OK);
+          await inquirer.prompt([
+            {
+              type: 'list',
+              name: 'target',
+              message: 'Select the target format for the documentation:',
+              default: 'JSON (.json)',
+              choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)', 'Next.js Site (.js)']
+            }
+          ]).then(async response => {
+            let spinner = ora('Transmogrifying API documentation to ' + response.target).start();
+            const output = path.join(answers.path, 'api-documentation.json');
+            if (response.target === "Markdown (.md)") {
+              await md_handler(output, answers.path);
+              spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
+            } else if (response.target === "Simple HTML (.html)") {
+              await html_handler(output, answers.path);
+              spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
+            } else if (response.target === "JSON (.json)") {
+              console.log('JSON output saved to:', output);
+              spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
+            } else if (response.target === "Next.js Site (.js)") {
+              spinner.info('Transmogrifying to a Next.js site needs a little information from you...');
+              await next_handler(output, answers.path, answers.baseUrl);
+            }
+          });
+        } catch (error) {
+          console.log('No API documentation found in the specified directory');
+          process.exit(1);
+        }
+      });
+    }
   }
 })();
