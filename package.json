@@ -33,7 +33,7 @@
   "files": [
     "src"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "commander": "^12.0.0",
