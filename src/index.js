@@ -16,7 +16,7 @@ inquirer.registerPrompt('path', PathPrompt);
 program
   .name('newton')
   .description('A CLI that creates your API documentation for you with AI')
-  .version('1.0.4');
+  .version('1.0.5');
 
 program
   .option('-t, --transmogrify-only', 'transmogrify existing API documentation')

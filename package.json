@@ -1,6 +1,6 @@
 {
   "name": "newton-aidocs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A CLI that creates your API documentation for you with AI",
   "main": "index.js",
   "scripts": {
@@ -11,16 +11,19 @@
   },
   "homepage": "https://github.com/mapldx/newton/blob/main/README.md",
   "keywords": [
-    "newton",
     "ai",
     "api",
+    "cli",
+    "doc",
     "docs",
     "documentation",
     "express",
-    "expressjs",
-    "express.js",
     "flask",
-    "openai"
+    "javascript",
+    "newton",
+    "node",
+    "openai",
+    "python"
   ],
   "author": "Zachary Will Sy (@mapldx)",
   "repository": {

@@ -83,6 +83,7 @@ npx newton
 ```
 
 ### Versions covered
+- `1.0.5`
 - `1.0.4`:
     - add search functionality on Next generated site, searching by endpoint title
     - add dark color scheme as an option for exporting Next generated site
