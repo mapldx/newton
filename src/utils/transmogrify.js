@@ -159,6 +159,8 @@ async function md_handler(json_file, save_path) {
   for (const endpoint of data) {
     markdown += await generate_md(endpoint);
   }
+  let date = new Date().toLocaleDateString();
+  markdown += `Generated using [🦊 mapldx/newton](https://github.com/mapldx/newton) on ${date}`;
   let output = path.join(save_path, 'api-documentation.md');
   await fs.writeFile(output, markdown);
   // console.log('Documentation generated successfully!');
@@ -170,6 +172,8 @@ async function html_handler(json_file, save_path) {
   for (const endpoint of data) {
     html += await generate_html(endpoint);
   }
+  let date = new Date().toLocaleDateString();
+  html += `<p><code>Generated using <a href='https://github.com/mapldx/newton' target='_blank'>🦊 mapldx/newton →</a> on ${date}</code></p>`
   let output = path.join(save_path, 'api-documentation.html');
   await fs.writeFile(output, html);
   // console.log('Documentation generated successfully!');
