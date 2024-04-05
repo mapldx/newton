@@ -1,5 +1,5 @@
-
-# <p align="center">🦊 newton</p>
+<p align="center"><img src="https://raw.githubusercontent.com/mapldx/newton/main/examples/cover-example.png?token=GHSAT0AAAAAACMLWUJZGJYYDG55XVXQKAK6ZQPZEBQ"></p>
+<h1><p align="center">🦊 newton</p></h1>
 <p align="center">A CLI that creates your API documentation for you with AI.</p>
 
 ## Examples
