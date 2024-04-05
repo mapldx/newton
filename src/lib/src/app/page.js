@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Code from "./components/code";
+import Endpoint from "./components/endpoint";
 
 export default function Home() {
   return (
@@ -88,32 +89,7 @@ export default function Home() {
             </div>
           </div>
           <hr></hr>
-          <div class="mt-12">
-            <div class="grid grid-cols-1 gap-4 mb-12 sm:grid-cols-2 sm:gap-8">
-              <div class="rounded-lg">
-                <p class="font-extrabold text-xl mb-4">[Endpoint title]</p>
-                <p class="text-sm leading-loose">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit arcu quis augue venenatis, quis finibus dolor varius.
-                  Aliquam eget convallis nulla, in luctus leo. Nulla metus urna, faucibus nec consequat et, rutrum eu est. Morbi sed interdum tellus,
-                  faucibus bibendum magna. Donec dignissim nisl quis convallis sodales.
-                  <br></br><br></br>
-                  Curabitur cursus lacus tortor, et fringilla elit ultrices id.
-                  Praesent vehicula purus eu quam porttitor fermentum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-                  inceptos himenaeos. Aenean a tincidunt purus. Proin fringilla at quam id efficitur.
-                </p>
-              </div>
-              <div>
-                <div class="mb-6">
-                  <p class="font-extrabold text-xl mb-4">Sample Request</p>
-                  <Code
-                    header="cURL"
-                    code={`curl -X GET https://api.example.com/teams -H "Authorization: B`}
-                    language="bash"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <Endpoint data={{}} />
         </div>
       </div>
     </main>
