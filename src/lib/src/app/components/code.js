@@ -15,12 +15,12 @@ export default function Code({ header, code, language }) {
                     showLineNumbers={true}
                     theme={dracula}
                     customStyle={{
-                        paddingLeft: '1rem',
-                        paddingRight: '1rem',
+                        padding: '1rem',
                         boxShadow: '1px 2px 3px rgba(0,0,0,0.35)',
                         fontSize: '0.8rem',
+                        overflowX: 'auto',
+                        overflowY: 'auto',
                     }}
-                    wrapLongLines={true}
                 />
             </div>
         </div>
