@@ -1,6 +1,6 @@
 {
   "name": "newton-aidocs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A CLI that creates your API documentation for you with AI",
   "main": "index.js",
   "scripts": {

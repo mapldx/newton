@@ -16,10 +16,10 @@ inquirer.registerPrompt('path', PathPrompt);
 program
   .name('newton')
   .description('A CLI that creates your API documentation for you with AI')
-  .version('1.0.3');
+  .version('1.0.4');
 
 program
-  .option('-t, --transmogrify-only', 'Transmogrify existing API documentation')
+  .option('-t, --transmogrify-only', 'transmogrify existing API documentation')
 
 program.parse(process.argv);
 const options = program.opts();

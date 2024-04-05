@@ -63,7 +63,7 @@ _[showing steps in process]_
     <img src="https://github.com/mapldx/newton/blob/main/examples/flask-app/flask-at-talking-to-ai.png?raw=true">
 </details>
 <details open>
-    <summary>Generating a Next.js site from an existing `newton`-generated JSON:</summary>
+    <summary>Generating a Next.js site from an existing newton-generated JSON:</summary>
     <img src="https://github.com/mapldx/newton/blob/main/examples/flask-app/flask-at-transmogrifying-existing.png?raw=true">
 </details>
 <details>
@@ -83,19 +83,23 @@ npx newton
 ```
 
 ### Versions covered
-- `1.0.3`:
-    - semver compliant `npm publish` for first public release while in beta
+- `1.0.4`:
+    - add search functionality on Next generated site, searching by endpoint title
+    - add dark color scheme as an option for exporting Next generated site
+    - add `npx newton -t` option to allow converting of previously generated or existing newton-generated JSON to other export options
+- `1.0.3`
 - `1.0.2`:
     - add functionality to export generated documentation to responsive Next.js site
     - add tab autocompletion for specifying project directory path
 - `1.0.1`:
     - add support for Flask (Python) projects
     - allow user to specify their own OpenAI API key for saved locally for persistent use
-- `1.0.0`: add functionality to generate documentation in JSON, Markdown, and HTML for Express.js (Node.js) APIs using GPT-3.5 Turbo
+- `1.0.0`:
+    - add functionality to generate documentation in JSON, Markdown, and HTML for Express.js (Node.js) APIs using GPT-3.5 Turbo
 
 ### Usage
 ```
-npx newton
+npx newton [--version/--transmogrify-only/--help]
 ```
 1. For **Express.js (Node.js)** projects, `newton` works when:
 - one valid package.json exists in the project folder (ideally, initialized by `npm init`), other than any in `node_modules` as they are ignored by default
@@ -152,3 +156,6 @@ def create_user():
 .
 ```
 > Note: The files mentioned above are provided for illustrative purposes only and do not guarantee functionality. However, their formats served as a guideline for Newton's parsing functionalities.
+
+### What is `transmogrify`?
+<img src="https://github.com/mapldx/newton/blob/main/examples/transmogrifier-comic.png?raw=true">
