@@ -34,7 +34,16 @@ _[showing completed results]_
 </details>
 <details open>
     <summary><code>npx newton</code> exported to Next.js site:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/express-app/express-next-page.png?raw=true">
+<table>
+  <tr>
+    <th>Light</th>
+    <th>Dark</th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/mapldx/newton/blob/main/examples/next-light-mode.png?raw=true"></td>
+    <td><img src="https://github.com/mapldx/newton/blob/main/examples/next-dark-mode.png?raw=true"></td>
+  </tr>
+</table>
 </details>
 <details>
     <summary><code>npx newton</code> exported to simple HTML page <a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.html">(source)</a>:</summary>
@@ -49,13 +58,13 @@ _[showing completed results]_
 
 ### Flask (Python) project 
 _[showing steps in process]_
-<details open>
+<details>
     <summary>Talking to AI to generate documentation for a route:</summary>
     <img src="https://github.com/mapldx/newton/blob/main/examples/flask-app/flask-at-talking-to-ai.png?raw=true">
 </details>
-<details>
-    <summary>Configuring generating of Next.js site export:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-app/flask-at-creating-next-export.png?raw=true">
+<details open>
+    <summary>Generating a Next.js site from an existing `newton`-generated JSON:</summary>
+    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-app/flask-at-transmogrifying-existing.png?raw=true">
 </details>
 <details>
     <summary>Generating of Next.js site export complete:</summary>
