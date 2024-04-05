@@ -2,27 +2,27 @@
   [
     {
       "endpoint_title": "Hello Endpoint",
-      "endpoint_url": "http://localhost:3000/",
+      "endpoint_url": "https://api-v2.example.com/",
       "endpoint_description": "A simple endpoint that returns a greeting message.",
       "endpoint_request": "GET",
       "request_fields": [],
       "response_fields": [
         {
           "field_name": "message",
-          "field_description": "A greeting message"
+          "field_description": "A message containing a greeting."
         }
       ],
       "response_types": [
         {
-          "response_type": "200",
-          "response_description": "Successful response with a greeting message"
+          "response_type": 200,
+          "response_description": "Successful response with a greeting message."
         }
       ],
       "request_examples": [
         {
-          "curl_example": "curl http://localhost:3000/",
-          "python_example": "requests.get('http://localhost:3000/')",
-          "nodejs_example": "axios.get('http://localhost:3000/')"
+          "curl_example": "curl -X GET https://api-v2.example.com/",
+          "python_example": "requests.get('https://api-v2.example.com/')",
+          "nodejs_example": "axios.get('https://api-v2.example.com/')"
         }
       ],
       "response_example": {
@@ -33,44 +33,44 @@
   [
     {
       "endpoint_title": "Get Data",
-      "endpoint_url": "http://localhost:3000/api/data",
-      "endpoint_description": "This endpoint retrieves user data including name, age, and city.",
+      "endpoint_url": "https://api-v2.example.com/api/data",
+      "endpoint_description": "This endpoint retrieves data about a person.",
       "endpoint_request": "GET",
       "request_fields": [
         {
           "field_name": "None",
-          "field_description": "No request body needed for this endpoint."
+          "field_description": "No request body required for this endpoint."
         }
       ],
       "response_fields": [
         {
           "field_name": "name",
-          "field_description": "The name of the user."
+          "field_description": "The name of the person."
         },
         {
           "field_name": "age",
-          "field_description": "The age of the user."
+          "field_description": "The age of the person."
         },
         {
           "field_name": "city",
-          "field_description": "The city where the user resides."
+          "field_description": "The city where the person resides."
         }
       ],
       "response_types": [
         {
-          "response_type": "200",
-          "response_description": "Successful retrieval of user data."
+          "response_type": 200,
+          "response_description": "Success. Data about the person is returned."
         },
         {
-          "response_type": "500",
-          "response_description": "Internal Server Error in case of an exception."
+          "response_type": 500,
+          "response_description": "Internal Server Error. Returned if an exception occurs."
         }
       ],
       "request_examples": [
         {
-          "curl_example": "curl http://localhost:3000/api/data",
-          "python_example": "requests.get('http://localhost:3000/api/data')",
-          "nodejs_example": "axios.get('http://localhost:3000/api/data')"
+          "curl_example": "curl -X GET https://api-v2.example.com/api/data",
+          "python_example": "import requests\nresponse = requests.get('https://api-v2.example.com/api/data')\nprint(response.json())",
+          "nodejs_example": "const axios = require('axios');\naxios.get('https://api-v2.example.com/api/data')\n    .then(response => console.log(response.data))\n    .catch(error => console.error(error));"
         }
       ],
       "response_example": {
@@ -83,40 +83,40 @@
   [
     {
       "endpoint_title": "Create User",
-      "endpoint_url": "http://localhost:3000/api/users",
-      "endpoint_description": "Endpoint to create a new user",
+      "endpoint_url": "https://api-v2.example.com/api/users",
+      "endpoint_description": "Endpoint to create a new user.",
       "endpoint_request": "POST",
       "request_fields": [
         {
           "field_name": "username",
-          "field_description": "The username of the new user"
+          "field_description": "The username of the new user."
         },
         {
           "field_name": "password",
-          "field_description": "The password of the new user"
+          "field_description": "The password of the new user."
         }
       ],
       "response_fields": [
         {
           "field_name": "message",
-          "field_description": "A message indicating the status"
+          "field_description": "A message indicating the result of the operation."
         }
       ],
       "response_types": [
         {
           "response_type": 201,
-          "response_description": "User successfully created"
+          "response_description": "User successfully created."
         },
         {
           "response_type": 401,
-          "response_description": "Unauthorized, authentication failed"
+          "response_description": "Unauthorized access."
         }
       ],
       "request_examples": [
         {
-          "curl_example": "curl -X POST http://localhost:3000/api/users -d 'username=johndoe&password=pass123'",
-          "python_example": "requests.post('http://localhost:3000/api/users', data={'username': 'johndoe', 'password': 'pass123'})",
-          "nodejs_example": "axios.post('http://localhost:3000/api/users', { username: 'johndoe', password: 'pass123' })"
+          "curl_example": "curl -X POST https://api-v2.example.com/api/users -d 'username=johndoe&password=pass123'",
+          "python_example": "import requests\n\nurl = 'https://api-v2.example.com/api/users'\npayload = {'username': 'johndoe', 'password': 'pass123'}\nresponse = requests.post(url, data=payload)\nprint(response.json())",
+          "nodejs_example": "const axios = require('axios');\n\naxios.post('https://api-v2.example.com/api/users', {\n  username: 'johndoe',\n  password: 'pass123'\n})\n.then(response => {\n  console.log(response.data);\n})\n.catch(error => {\n  console.error(error);\n});"
         }
       ],
       "response_example": {
