@@ -200,7 +200,7 @@ async function copy_folder(source, target) {
 }
 
 async function next_handler(json_file, save_path, base_url) {
-  inquirer.prompt([
+  await inquirer.prompt([
     {
       type: 'input',
       name: 'title',

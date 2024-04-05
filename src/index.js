@@ -254,7 +254,65 @@ async function configure_api() {
           }
         };
         const config = input[answers.framework];
-
+        try {
+          await fs.access(path.join(answers.path, 'api-documentation.json'), fs.constants.F_OK);
+          console.log('! newton-generated API documentation has been found in this directory (api-documentation.json))');
+          await inquirer.prompt([
+            {
+              type: 'confirm',
+              name: 'overwrite',
+              message: 'Would you like to overwrite it?',
+              default: false
+            }
+          ]).then(async response => {
+            if (response.overwrite) {
+            } else {
+              await inquirer.prompt([
+                {
+                  type: 'confirm',
+                  name: 'continue',
+                  message: 'Would you like to transmogrify the existing API documentation?',
+                  default: true
+                }
+              ]).then(async response => {
+                if (!response.continue) {
+                  process.exit(0);
+                } else {
+                  await inquirer.prompt([
+                    {
+                      type: 'list',
+                      name: 'target',
+                      message: 'Select the target format for the documentation:',
+                      default: 'JSON (.json)',
+                      choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)', 'Next.js Site (.js)']
+                    }
+                  ]).then(async response => {
+                    let spinner = ora('Transmogrifying API documentation to ' + response.target).start();
+                    const output = path.join(answers.path, 'api-documentation.json');
+                    if (response.target === "Markdown (.md)") {
+                      await md_handler(output, answers.path);
+                      spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
+                      process.exit(0);
+                    } else if (response.target === "Simple HTML (.html)") {
+                      await html_handler(output, answers.path);
+                      spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
+                      process.exit(0);
+                    } else if (response.target === "JSON (.json)") {
+                      console.log('JSON output saved to:', output);
+                      spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
+                      process.exit(0);
+                    } else if (response.target === "Next.js Site (.js)") {
+                      spinner.info('Transmogrifying to a Next.js site needs a little information from you...');
+                      await next_handler(output, answers.path, answers.baseUrl);
+                      process.exit(0);
+                    }
+                  });
+                }
+              });
+            }
+          });
+        } catch (err) {
+        }
         console.log("\n");
         let spinner = ora(`Looking for a valid ${config.indicator}`).start();
         spinner.color = 'blue';
