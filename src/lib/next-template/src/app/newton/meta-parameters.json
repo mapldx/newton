@@ -1,5 +1,6 @@
 {
     "SITE_TITLE": "Example API",
     "BASE_URL": "https://api.example.com",
-    "DATE_GENERATED": "Thu, 01 Jan 1970"
+    "DATE_GENERATED": "Thu, 01 Jan 1970",
+    "DARK_MODE": true
 }

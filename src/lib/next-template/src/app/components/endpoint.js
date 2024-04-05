@@ -1,6 +1,6 @@
 import Code from './code';
 
-export default function Endpoint({ data }) {
+export default function Endpoint({ data, isDark }) {
     if (!data || !data.endpoint_title) return (<div></div>);
 
     const req_color = {
@@ -46,20 +46,18 @@ export default function Endpoint({ data }) {
         <div class="" id={`${data.endpoint_title.replace(' ', '-')}`}>
             <div class="grid grid-cols-1 gap-4 mb-12 sm:grid-cols-2 sm:gap-8">
                 <div class="rounded-lg">
-                    <p class="font-extrabold text-xl mb-4">{data.endpoint_title}</p>
+                    <p class={`${isDark ? 'text-slate-300' : 'text-black'} font-semibold pb-3 text-sm tracking-wide`}>{data.endpoint_title}</p>
                     <p class={`font-mono mb-3 text-sm`}>
                         <span class={`${endpoint_request_bg} max-w-fit p-1 px-2 rounded-md mr-2`}>
                             {data.endpoint_request}
                         </span>
-                        <span>
+                        <span class={`${isDark ? 'text-slate-300' : 'text-black'}`}>
                             {data.endpoint_url}
                         </span>
                     </p>
-                    <p class="text-sm leading-loose mb-6">
-                        {data.endpoint_description}
-                    </p>
+                    <p class={`${isDark ? 'text-slate-300' : 'text-black'} text-sm leading-loose mb-6`}>{data.endpoint_description}</p>
                     <div class="mb-6">
-                        <p class="font-extrabold text-md mb-4">Request Fields</p>
+                        <p class={`${isDark ? 'text-slate-300' : 'text-black'} font-extrabold text-md mb-4`}>Request Fields</p>
                         <ul class="space-y-1">
                             <li>
                                 {data.request_fields.map((field, index) => {
@@ -68,7 +66,7 @@ export default function Endpoint({ data }) {
                                             <span class={`bg-gray-300 max-w-fit p-1 px-2 rounded-md mr-2`}>
                                                 {field.field_name}
                                             </span>
-                                            <span>
+                                            <span class={`${isDark ? 'text-slate-300' : 'text-black'}`}>
                                                 {field.field_description}
                                             </span>
                                         </p>
@@ -78,7 +76,7 @@ export default function Endpoint({ data }) {
                         </ul>
                     </div>
                     <div class="mb-6">
-                        <p class="font-extrabold text-md mb-4">Response Fields</p>
+                        <p class={`${isDark ? 'text-slate-300' : 'text-black'} font-extrabold text-md mb-4`}>Response Fields</p>
                         <ul class="space-y-1">
                             <li>
                                 {data.response_fields.map((field, index) => {
@@ -87,7 +85,7 @@ export default function Endpoint({ data }) {
                                             <span class={`bg-gray-300 max-w-fit p-1 px-2 rounded-md mr-2`}>
                                                 {field.field_name}
                                             </span>
-                                            <span>
+                                            <span class={`${isDark ? 'text-slate-300' : 'text-black'}`}>
                                                 {field.field_description}
                                             </span>
                                         </p>
@@ -97,7 +95,7 @@ export default function Endpoint({ data }) {
                         </ul>
                     </div>
                     <div class="mb-6">
-                        <p class="font-extrabold text-md mb-4">Response Types</p>
+                        <p class={`${isDark ? 'text-slate-300' : 'text-black'} font-extrabold text-md mb-4`}>Response Types</p>
                         <ul class="space-y-1">
                             <li>
                                 {data.response_types.map((type, index) => {
@@ -106,7 +104,7 @@ export default function Endpoint({ data }) {
                                             <span class={`${response_type_color(type.response_type)} max-w-fit p-1 px-2 rounded-md mr-2`}>
                                                 {type.response_type}
                                             </span>
-                                            <span>
+                                            <span class={`${isDark ? 'text-slate-300' : 'text-black'}`}>
                                                 {type.response_description}
                                             </span>
                                         </p>
@@ -118,7 +116,7 @@ export default function Endpoint({ data }) {
                 </div>
                 <div>
                     <div class="mb-6">
-                        <p class="font-extrabold text-xl mb-4">Sample Requests</p>
+                        <p class={`${isDark ? 'text-slate-300' : 'text-black'} font-extrabold text-md mb-4`}>Sample Requests</p>
                         <ul class="space-y-6">
                             <li>
                                 <Code
@@ -144,7 +142,7 @@ export default function Endpoint({ data }) {
                         </ul>
                     </div>
                     <div class="mb-6">
-                        <p class="font-extrabold text-xl mb-4">Sample Response</p>
+                        <p class={`${isDark ? 'text-slate-300' : 'text-black'} font-extrabold text-md mb-4`}>Sample Response</p>
                         <Code
                             header="JSON"
                             code={`${JSON.stringify(data.response_example, null, 2)}`}
