@@ -3,7 +3,7 @@
 import { Command } from 'commander';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { md_handler, html_handler } from './utils/transmogrify.js';
+import { md_handler, html_handler, next_handler } from './utils/transmogrify.js';
 import { craft_prompt } from './utils/ai.js';
 import inquirer from 'inquirer';
 import ora from 'ora';
@@ -234,7 +234,7 @@ async function configure_api() {
           name: 'target',
           message: 'Select the target format for the documentation:',
           default: 'JSON (.json)',
-          choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)']
+          choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)', 'Next.js Site (.js)']
         }
       ]).then(async answers => {
         const input = {
@@ -252,7 +252,7 @@ async function configure_api() {
           }
         };
         const config = input[answers.framework];
-  
+
         console.log("\n");
         let spinner = ora(`Looking for a valid ${config.indicator}`).start();
         spinner.color = 'blue';
@@ -277,12 +277,18 @@ async function configure_api() {
             // }
             if (answers.target === "Markdown (.md)") {
               await md_handler(output, answers.path);
+              spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
             } else if (answers.target === "Simple HTML (.html)") {
               await html_handler(output, answers.path);
+              spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
             } else if (answers.target === "JSON (.json)") {
               // console.log('JSON output saved to:', output);
+              spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
+            } else if (answers.target === "Next.js Site (.js)") {
+              // console.log('Next.js Site output saved to:', output);
+              spinner.info('Transmogrifying to a Next.js site needs a little information from you...')
+              await next_handler(output, answers.path, answers.baseUrl);
             }
-            spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
           } else {
             console.log('No target format specified');
             process.exit(1);

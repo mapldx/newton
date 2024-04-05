@@ -1,0 +1,442 @@
+[
+  [
+    {
+      "endpoint_title": "Homepage",
+      "endpoint_url": "https://api.usemaven.app/",
+      "endpoint_description": "Returns the homepage HTML file.",
+      "endpoint_request": "GET",
+      "request_fields": [],
+      "response_fields": [],
+      "response_types": [
+        {
+          "response_type": "200 OK",
+          "response_description": "Successful retrieval of the homepage HTML file."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl https://api.usemaven.app/",
+          "python_example": "requests.get('https://api.usemaven.app/')",
+          "nodejs_example": "axios.get('https://api.usemaven.app/')"
+        }
+      ],
+      "response_example": "HTML content of the homepage file."
+    }
+  ],
+  [
+    {
+      "endpoint_title": "User Authentication",
+      "endpoint_url": "https://api.usemaven.app/api/auth",
+      "endpoint_description": "Endpoint for authenticating users and creating necessary user-related documents.",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "address",
+          "field_description": "The user's address for identification and document creation."
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "message",
+          "field_description": "A simple response message indicating the success of the operation."
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Success response, authentication and document creation completed."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST https://api.usemaven.app/api/auth -d 'address=user123'",
+          "python_example": "requests.post('https://api.usemaven.app/api/auth', json={'address': 'user123'})",
+          "nodejs_example": "axios.post('https://api.usemaven.app/api/auth', { address: 'user123' })"
+        }
+      ],
+      "response_example": "Hello World!"
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Create Form",
+      "endpoint_url": "https://api.usemaven.app/api/forms/create",
+      "endpoint_description": "Create a new form with the provided details.",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "address",
+          "field_description": "The address associated with the form."
+        },
+        {
+          "field_name": "name",
+          "field_description": "The name of the form."
+        },
+        {
+          "field_name": "desc",
+          "field_description": "The description of the form."
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "formId",
+          "field_description": "The unique identifier of the newly created form."
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Success. Form created successfully."
+        },
+        {
+          "response_type": "400",
+          "response_description": "Bad Request. Invalid input data."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST https://api.usemaven.app/api/forms/create -d 'address=123 Street&name=Sample Form&desc=This is a sample form'",
+          "python_example": "import requests\n\nurl = 'https://api.usemaven.app/api/forms/create'\npayload = {'address': '123 Street', 'name': 'Sample Form', 'desc': 'This is a sample form'}\nresponse = requests.post(url, data=payload)\nprint(response.text)",
+          "nodejs_example": "const axios = require('axios');\n\naxios.post('https://api.usemaven.app/api/forms/create', { address: '123 Street', name: 'Sample Form', desc: 'This is a sample form' })\n    .then(response => {\n        console.log(response.data);\n    })\n    .catch(error => {\n        console.error(error);\n    });"
+        }
+      ],
+      "response_example": "form-1a2b3c4d"
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Delete Form Data",
+      "endpoint_url": "https://api.usemaven.app/api/forms/delete",
+      "endpoint_description": "This endpoint is used to delete specific form data identified by its address.",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "address",
+          "field_description": "The address of the form data to be deleted"
+        },
+        {
+          "field_name": "id",
+          "field_description": "The unique identifier of the form data"
+        },
+        {
+          "field_name": "name",
+          "field_description": "The name associated with the form data"
+        },
+        {
+          "field_name": "desc",
+          "field_description": "The description of the form data"
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "id",
+          "field_description": "The unique identifier of the deleted form data"
+        },
+        {
+          "field_name": "name",
+          "field_description": "The name of the deleted form data"
+        },
+        {
+          "field_name": "desc",
+          "field_description": "The description of the deleted form data"
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Success: Form data successfully deleted"
+        },
+        {
+          "response_type": "400",
+          "response_description": "Bad Request: Invalid or missing parameters"
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST https://api.usemaven.app/api/forms/delete -d 'address=123' -d 'id=456' -d 'name=Example' -d 'desc=Description'",
+          "python_example": "requests.post('https://api.usemaven.app/api/forms/delete', json={'address': '123', 'id': '456', 'name': 'Example', 'desc': 'Description'})",
+          "nodejs_example": "axios.post('https://api.usemaven.app/api/forms/delete', { address: '123', id: '456', name: 'Example', desc: 'Description' })"
+        }
+      ],
+      "response_example": {
+        "id": "456",
+        "name": "Example",
+        "desc": "Description"
+      }
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Publish Form",
+      "endpoint_url": "https://api.usemaven.app/api/forms/publish",
+      "endpoint_description": "Endpoint to publish a form with specified details",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "formId",
+          "field_description": "The unique identifier of the form to be published"
+        },
+        {
+          "field_name": "target_identifier",
+          "field_description": "The identifier of the target for the form"
+        },
+        {
+          "field_name": "fields",
+          "field_description": "The fields of the form in JSON format"
+        },
+        {
+          "field_name": "target_primary",
+          "field_description": "Primary target details"
+        },
+        {
+          "field_name": "target_secondary",
+          "field_description": "Secondary target details"
+        },
+        {
+          "field_name": "encryption",
+          "field_description": "Encryption details for the form"
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "response",
+          "field_description": "Confirmation message of the published form"
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200 OK",
+          "response_description": "Form successfully published"
+        },
+        {
+          "response_type": "400 Bad Request",
+          "response_description": "Invalid request data provided"
+        },
+        {
+          "response_type": "500 Internal Server Error",
+          "response_description": "Server error while publishing the form"
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST https://api.usemaven.app/api/forms/publish -d '{\"formId\": \"12345\", \"target_identifier\": \"target123\", \"fields\": {\"field1\": \"value1\"}, \"target_primary\": \"primary\", \"target_secondary\": \"secondary\", \"encryption\": \"AES\"}'"
+        },
+        {
+          "python_example": "requests.post('https://api.usemaven.app/api/forms/publish', json={'formId': '12345', 'target_identifier': 'target123', 'fields': {'field1': 'value1'}, 'target_primary': 'primary', 'target_secondary': 'secondary', 'encryption': 'AES'})"
+        },
+        {
+          "nodejs_example": "axios.post('https://api.usemaven.app/api/forms/publish', {formId: '12345', target_identifier: 'target123', fields: {field1: 'value1'}, target_primary: 'primary', target_secondary: 'secondary', encryption: 'AES'})"
+        }
+      ],
+      "response_example": "Published form 12345"
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Get Form by ID",
+      "endpoint_url": "https://api.usemaven.app/api/forms/get/:id",
+      "endpoint_description": "Retrieve a form by its unique identifier.",
+      "endpoint_request": "GET",
+      "request_fields": [
+        {
+          "field_name": "id",
+          "field_description": "The unique identifier of the form to retrieve."
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "data",
+          "field_description": "The data of the form retrieved."
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Success. Form data returned."
+        },
+        {
+          "response_type": "404",
+          "response_description": "Not Found. Form with the provided ID does not exist."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X GET https://api.usemaven.app/api/forms/get/123",
+          "python_example": "requests.get('https://api.usemaven.app/api/forms/get/123')",
+          "nodejs_example": "axios.get('https://api.usemaven.app/api/forms/get/123')"
+        }
+      ],
+      "response_example": {
+        "data": {
+          "formId": "123",
+          "name": "Sample Form",
+          "fields": [
+            "field1",
+            "field2"
+          ],
+          "created_at": "2022-01-01T00:00:00Z"
+        }
+      }
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Get Forms by Target",
+      "endpoint_url": "https://api.usemaven.app/api/forms/:target",
+      "endpoint_description": "Retrieve a list of form IDs based on the target specified.",
+      "endpoint_request": "GET",
+      "request_fields": [
+        {
+          "field_name": "target",
+          "field_description": "The target parameter specifying the type of forms to retrieve."
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "formList",
+          "field_description": "An array containing the IDs of forms matching the specified target."
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Success. Returns an array of form IDs."
+        },
+        {
+          "response_type": "404",
+          "response_description": "Not Found. No forms found for the specified target."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X GET https://api.usemaven.app/api/forms/someTarget",
+          "python_example": "import requests\nresponse = requests.get('https://api.usemaven.app/api/forms/someTarget')\nprint(response.json())",
+          "nodejs_example": "const axios = require('axios');\naxios.get('https://api.usemaven.app/api/forms/someTarget')\n  .then(response => console.log(response.data))\n  .catch(error => console.error(error));"
+        }
+      ],
+      "response_example": "[\"formID1\", \"formID2\", \"formID3\"]"
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Submit Response to Form",
+      "endpoint_url": "https://api.usemaven.app/api/forms/layer/submit",
+      "endpoint_description": "This endpoint allows users to submit a response to a specific form.",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "id",
+          "field_description": "The unique identifier of the form to which the response is being submitted."
+        },
+        {
+          "field_name": "response",
+          "field_description": "The actual response data being submitted to the form."
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "message",
+          "field_description": "A message confirming the successful submission of the response."
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Success: Response submitted to the form successfully."
+        },
+        {
+          "response_type": "400",
+          "response_description": "Bad Request: Invalid or missing parameters in the request."
+        },
+        {
+          "response_type": "500",
+          "response_description": "Internal Server Error: An error occurred on the server side."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST https://api.usemaven.app/api/forms/layer/submit -d '{\"id\":\"form123\", \"response\":\"This is a sample response\"}'",
+          "python_example": "import requests\n\nurl = 'https://api.usemaven.app/api/forms/layer/submit'\npayload = {'id': 'form123', 'response': 'This is a sample response'}\nresponse = requests.post(url, json=payload)\nprint(response.text)",
+          "nodejs_example": "const axios = require('axios');\n\naxios.post('https://api.usemaven.app/api/forms/layer/submit', {\n    id: 'form123',\n    response: 'This is a sample response'\n}).then(response => {\n    console.log(response.data);\n}).catch(error => {\n    console.error(error);\n});"
+        }
+      ],
+      "response_example": "Submitted response to form form123"
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Get Document by Address",
+      "endpoint_url": "https://api.usemaven.app/api/documents/get",
+      "endpoint_description": "Retrieve a document by its address",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "address",
+          "field_description": "The address of the document to retrieve"
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "data",
+          "field_description": "The document data"
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200 OK",
+          "response_description": "Returned when the document is successfully retrieved"
+        },
+        {
+          "response_type": "404 Not Found",
+          "response_description": "Returned when the document with the provided address is not found"
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST https://api.usemaven.app/api/documents/get -d 'address=example_address'",
+          "python_example": "import requests\nresponse = requests.post('https://api.usemaven.app/api/documents/get', data={'address': 'example_address'})\nprint(response.json())",
+          "nodejs_example": "const axios = require('axios');\naxios.post('https://api.usemaven.app/api/documents/get', { address: 'example_address' })\n  .then(response => console.log(response.data))\n  .catch(error => console.error(error));"
+        }
+      ],
+      "response_example": "{\n  \"data\": {\n    \"title\": \"Example Document\",\n    \"content\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit.\"\n  }\n}"
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Document Match",
+      "endpoint_url": "https://api.usemaven.app/api/documents/match",
+      "endpoint_description": "This endpoint matches data provided in the request body with targets stored in the database and returns the matched results.",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "data",
+          "field_description": "An array of data to be matched with targets in the database"
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "match",
+          "field_description": "An array containing the matched target data"
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Successful response with an array of matched target data"
+        },
+        {
+          "response_type": "500",
+          "response_description": "Internal server error"
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST https://api.usemaven.app/api/documents/match -d '{\"data\": [\"target1\", \"target2\"]}'",
+          "python_example": "requests.post('https://api.usemaven.app/api/documents/match', json={'data': ['target1', 'target2']})",
+          "nodejs_example": "axios.post('https://api.usemaven.app/api/documents/match', { data: ['target1', 'target2'] })"
+        }
+      ],
+      "response_example": "[\"matched_target1\", \"matched_target2\"]"
+    }
+  ]
+]

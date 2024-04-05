@@ -1,9 +1,12 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import inquirer from 'inquirer';
+import { fileURLToPath } from 'url';
+import ora from 'ora';
 
 async function generate_md(endpoints) {
   let markdown = "";
-  
+
   if (endpoints == null) {
     return;
   }
@@ -61,7 +64,7 @@ async function generate_md(endpoints) {
         }
       });
       markdown += "\n";
-    }    
+    }
 
     if (endpoint.response_example) {
       markdown += "### Response Example\n\n";
@@ -78,7 +81,7 @@ async function generate_md(endpoints) {
 
 async function generate_html(endpoints) {
   let html = "";
-  
+
   if (endpoints == null) {
     return;
   }
@@ -135,7 +138,7 @@ async function generate_html(endpoints) {
         }
       });
       html += "\n";
-    }    
+    }
 
     if (endpoint.response_example) {
       html += "<h3>Response Example</h3>\n\n";
@@ -172,5 +175,56 @@ async function html_handler(json_file, save_path) {
   // console.log('Documentation generated successfully!');
 }
 
-// export the md and html handlers
-export { md_handler, html_handler };
+async function copy_folder(source, target) {
+  try {
+    await fs.access(target);
+  } catch (e) {
+    await fs.mkdir(target, { recursive: true });
+  }
+  const items = await fs.readdir(source, { withFileTypes: true });
+
+  for (let item of items) {
+    const srcPath = path.join(source, item.name);
+    const targetPath = path.join(target, item.name);
+
+    if (item.isDirectory()) {
+      await copyFolderRecursive(srcPath, targetPath);
+    } else {
+      await fs.copyFile(srcPath, targetPath);
+    }
+  }
+}
+
+async function next_handler(json_file, save_path, base_url) {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'title',
+      message: 'Enter your generated site title:',
+      default: `${path.basename(save_path)} API Documentation`
+    }
+  ]).then(async (answers) => {
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    let source = path.join(__dirname, '../lib/next-template');
+    let target = path.join(save_path, 'newton-generated-site');
+    let spinner = ora('Transmogrifying API documentation to a Next.js site...').start();
+    spinner.color = 'blue';
+    await copy_folder(source, target);
+    await fs.copyFile(path.join(save_path, 'api-documentation.json'), path.join(target, 'src/app/newton/api-documentation.json'));
+
+    let meta_parameters = await fs.readFile(path.join(target, 'src/app/newton/meta-parameters.json'), 'utf8');
+    meta_parameters = meta_parameters.replace('Example API', answers.title);
+    meta_parameters = meta_parameters.replace('https://api.example.com', base_url);
+    meta_parameters = meta_parameters.replace('Thu, 01 Jan 1970', new Date().toLocaleDateString());
+    await fs.writeFile(path.join(target, 'src/app/newton/meta-parameters.json'), meta_parameters);
+    // console.log('Documentation generated successfully!');
+    spinner.succeed('Successfully transmogrified API documentation to Next.js Site (.js)');
+    console.log("\n");
+    console.log("To build your Next.js generated site:\n");
+    console.log("cd " + target);
+    console.log("npm install");
+    console.log("npm run build && npm run start");
+  });
+}
+
+export { md_handler, html_handler, next_handler };
