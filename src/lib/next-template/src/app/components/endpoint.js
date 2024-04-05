@@ -20,7 +20,6 @@ export default function Endpoint({ data, isDark }) {
         return "bg-gray-300";
     }
     function determine_example_request_path(request_examples, type = "curl") {
-        console.log(data.endpoint_title, request_examples.length);
         if (request_examples.length === 1) {
             if (type === "curl") {
                 return request_examples[0].curl_example;
