@@ -7,7 +7,6 @@ import { md_handler, html_handler, next_handler } from './utils/transmogrify.js'
 import { craft_prompt } from './utils/ai.js';
 import inquirer from 'inquirer';
 import ora from 'ora';
-import util from 'util';
 
 const program = new Command();
 process.removeAllListeners('warning');

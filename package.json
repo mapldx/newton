@@ -19,6 +19,5 @@
     "inquirer": "^9.2.17",
     "openai": "^4.32.1",
     "ora": "^8.0.1",
-    "react-code-blocks": "^0.1.6"
   }
 }
