@@ -222,8 +222,8 @@ async function next_handler(json_file, save_path, base_url) {
     console.log("\n");
     console.log("To build your Next.js generated site:\n");
     console.log("cd " + target);
-    console.log("npm install");
-    console.log("npm run build && npm run start");
+    console.log("yarn");
+    console.log("yarn build && yarn start");
   });
 }
 
