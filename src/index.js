@@ -166,6 +166,21 @@ async function parse_entrypoint(config, package_path, base_url) {
   }
 }
 
+async function ts_handler(answers, json_path, spinner) {
+  if (answers.target === "Markdown (.md)") {
+    await md_handler(json_path, answers.path);
+    spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
+  } else if (answers.target === "Simple HTML (.html)") {
+    await html_handler(json_path, answers.path);
+    spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
+  } else if (answers.target === "JSON (.json)") {
+    spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
+  } else if (answers.target === "Next.js Site (.js)") {
+    spinner.info('Transmogrifying to a Next.js site needs a little information from you...');
+    await next_handler(json_path, answers);
+  }
+}
+
 async function configure_api() {
   let api_path;
   try {
@@ -266,33 +281,9 @@ async function configure_api() {
           let responses = await parse_entrypoint(config, package_path, answers.baseUrl);
           spinner = ora('Writing API documentation').start();
           spinner.color = 'blue';
-          const output = path.join(answers.path, 'api-documentation.json');
-          await fs.writeFile(output, JSON.stringify(responses, null, 2));
-          // spinner.succeed('Successfully written default JSON output to + ' + output);
-          // console.log('API documentation generated successfully');
-          if (answers.target) {
-            // console.log('Target format:', answers.target);
-            // if (answers.target !== "JSON (.json)") {
-            //   spinner = ora('Transmogrifying API documentation to ' + answers.target).start();
-            // }
-            if (answers.target === "Markdown (.md)") {
-              await md_handler(output, answers.path);
-              spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
-            } else if (answers.target === "Simple HTML (.html)") {
-              await html_handler(output, answers.path);
-              spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
-            } else if (answers.target === "JSON (.json)") {
-              // console.log('JSON output saved to:', output);
-              spinner.succeed('Successfully transmogrified API documentation to ' + answers.target);
-            } else if (answers.target === "Next.js Site (.js)") {
-              // console.log('Next.js Site output saved to:', output);
-              spinner.info('Transmogrifying to a Next.js site needs a little information from you...')
-              await next_handler(output, answers.path, answers.baseUrl);
-            }
-          } else {
-            console.log('No target format specified');
-            process.exit(1);
-          }
+          const json_path = path.join(answers.path, 'api-documentation.json');
+          await fs.writeFile(json_path, JSON.stringify(responses, null, 2));
+          await ts_handler(answers, json_path, spinner);
         } else {
           console.log('package.json not found');
         }
@@ -320,21 +311,10 @@ async function configure_api() {
               choices: ['JSON (.json)', 'Markdown (.md)', 'Simple HTML (.html)', 'Next.js Site (.js)']
             }
           ]).then(async response => {
-            let spinner = ora('Transmogrifying API documentation to ' + response.target).start();
-            const output = path.join(answers.path, 'api-documentation.json');
-            if (response.target === "Markdown (.md)") {
-              await md_handler(output, answers.path);
-              spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
-            } else if (response.target === "Simple HTML (.html)") {
-              await html_handler(output, answers.path);
-              spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
-            } else if (response.target === "JSON (.json)") {
-              console.log('JSON output saved to:', output);
-              spinner.succeed('Successfully transmogrified API documentation to ' + response.target);
-            } else if (response.target === "Next.js Site (.js)") {
-              spinner.info('Transmogrifying to a Next.js site needs a little information from you...');
-              await next_handler(output, answers.path, answers.baseUrl);
-            }
+            answers.target = response.target;
+            let spinner = ora('Transmogrifying API documentation to ' + answers.target).start();
+            const json_path = path.join(answers.path, 'api-documentation.json');
+            await ts_handler(answers, json_path, spinner);
           });
         } catch (error) {
           console.log('No API documentation found in the specified directory');
