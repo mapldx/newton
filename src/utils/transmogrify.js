@@ -163,7 +163,6 @@ async function md_handler(json_file, save_path) {
   markdown += `Generated using [🦊 mapldx/newton](https://github.com/mapldx/newton) on ${date}`;
   let output = path.join(save_path, 'api-documentation.md');
   await fs.writeFile(output, markdown);
-  // console.log('Documentation generated successfully!');
 }
 
 async function html_handler(json_file, save_path) {
@@ -176,7 +175,6 @@ async function html_handler(json_file, save_path) {
   html += `<p><code>Generated using <a href='https://github.com/mapldx/newton' target='_blank'>🦊 mapldx/newton →</a> on ${date}</code></p>`
   let output = path.join(save_path, 'api-documentation.html');
   await fs.writeFile(output, html);
-  // console.log('Documentation generated successfully!');
 }
 
 async function copy_folder(source, target) {
@@ -231,7 +229,6 @@ async function next_handler(json_file, answers) {
     meta_parameters = meta_parameters.replace('Thu, 01 Jan 1970', new Date().toLocaleDateString());
     meta_parameters = meta_parameters.replace('"null"', answers.dark_mode.includes('Dark') ? true : false);
     await fs.writeFile(path.join(target, 'src/app/newton/meta-parameters.json'), meta_parameters);
-    // console.log('Documentation generated successfully!');
     spinner.succeed('Successfully transmogrified API documentation to Next.js Site (.js)');
     console.log("\n");
     console.log("To build your Next.js generated site:\n");

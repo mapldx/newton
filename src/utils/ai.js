@@ -24,8 +24,6 @@ async function talk_to_ai(payload, OPENAI_API_KEY) {
     try {
         message = response.choices.map(choice => JSON.parse(choice.message.content));
     } catch (error) {
-        // console.log("Error: ", error);
-        // console.log("\n");
         return null;
     }
     return message;
@@ -52,7 +50,6 @@ async function craft_prompt(framework, base_url, data, OPENAI_API_KEY) {
             base_url,
             data
         };
-        // console.log("Payload: ", payload);
         let response = await talk_to_ai(payload, OPENAI_API_KEY);
         return response;
     } else {

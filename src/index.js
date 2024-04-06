@@ -26,13 +26,6 @@ const options = program.opts();
 let OPENAI_API_KEY = '';
 
 async function parse_path(directory, target = 'package.json') {
-  // let spinner = ora('Looking for a valid package.json').start();
-  // spinner.color = 'blue';
-  if (directory === undefined) {
-    console.log('Please provide a path to your project directory');
-    process.exit(1);
-  }
-  // console.log('Checking path', directory);
   const files = await fs.readdir(directory, { withFileTypes: true });
   for (const file of files) {
     if (file.isDirectory() && file.name !== 'node_modules' && (file.name).startsWith('.') === false && (file.name).startsWith('newton') === false) {
@@ -42,11 +35,9 @@ async function parse_path(directory, target = 'package.json') {
       }
     }
     if (target === file.name) {
-      // spinner.succeed('Found a valid package.json');
       return [path.join(directory, file.name)];
     }
   }
-  // spinner.fail('No package.json found');
   return undefined;
 }
 
@@ -59,11 +50,9 @@ async function parse_entrypoint(config, package_path, base_url) {
     const file = await fs.readFile(package_path, 'utf8');
     entrypoint = JSON.parse(file).main;
     if (!entrypoint) {
-      // console.log('No entrypoint found');
       spinner.fail('No entrypoint found in package.json (main field)');
       process.exit(1);
     }
-    // console.log('Entrypoint:', entrypoint);
     entrypoint_path = path.join(path.dirname(package_path), entrypoint);
     spinner.succeed('Found a valid entrypoint at ' + entrypoint_path);
   } else if (config.language === "Python") { }
@@ -73,7 +62,6 @@ async function parse_entrypoint(config, package_path, base_url) {
     }
     spinner = ora('Reading entrypoint for API endpoints').start();
     const data = await fs.readFile(entrypoint_path, 'utf8');
-    // console.log('Data:', data);
     let is_capturing = false;
     let content = '';
     let responses = [];
@@ -115,7 +103,6 @@ async function parse_entrypoint(config, package_path, base_url) {
             }
             spinner = ora('Talking to AI for documentation on ' + endpoint).start();
             let message = await craft_prompt(config.framework, base_url, content, OPENAI_API_KEY);
-            // console.log('Message:', message);
             if (message == null) {
               spinner.info('Received an invalid response from the AI, automatically retrying...');
               spinner = ora('Talking to AI').start();
@@ -135,10 +122,8 @@ async function parse_entrypoint(config, package_path, base_url) {
       }
     }
     if (config.language === "Python" && is_capturing && content) {
-      // endpointContents.push(content);
       let endpoint = content.indexOf('@app.route');
       endpoint = content.substring(endpoint, content.indexOf('\n', endpoint));
-      // console.log('Endpoint:', endpoint);
       if (!has_endpoint) {
         spinner.succeed('Found at least one API endpoint');
         has_endpoint = true;
@@ -154,7 +139,6 @@ async function parse_entrypoint(config, package_path, base_url) {
         responses.push(message);
       }
     }
-    // console.log('Responses:', responses);
     if (spinner.isSpinning) {
       spinner.succeed('AI has responded');
     }
@@ -188,7 +172,6 @@ async function configure_api() {
     await fs.access(api_path, fs.constants.F_OK);
     OPENAI_API_KEY = await fs.readFile(api_path, 'utf8');
   } catch (err) {
-    // spinner.fail('No OpenAI API key found, enter one to continue');
     const answers = await inquirer.prompt([
       {
         type: 'input',
@@ -220,8 +203,6 @@ async function configure_api() {
   if (process.argv.length == 2) {
     console.log('🦊 newton – a CLI that creates your API documentation for you with AI');
     console.log('\n');
-    // console.log('Starting in interactive mode...\n');
-    // let spinner = ora('Configuring...').start();
     configure_api().then(() => {
       inquirer.prompt([
         {
