@@ -7,9 +7,11 @@ import { md_handler, html_handler, next_handler } from './utils/transmogrify.js'
 import { craft_prompt } from './utils/ai.js';
 import inquirer from 'inquirer';
 import ora from 'ora';
+import { PathPrompt } from 'inquirer-path';
 
 const program = new Command();
 process.removeAllListeners('warning');
+inquirer.registerPrompt('path', PathPrompt);
 
 program
   .name('newton')
@@ -210,10 +212,11 @@ async function configure_api() {
     configure_api().then(() => {
       inquirer.prompt([
         {
-          type: 'input',
+          type: 'path',
           name: 'path',
-          message: 'Enter the path to your project directory:',
-          default: '.'
+          message: 'Enter the path to your project directory (tab to complete):',
+          directoryOnly: true,
+          default: '.',
         },
         {
           type: 'list',

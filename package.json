@@ -17,6 +17,7 @@
     "commander": "^12.0.0",
     "dotenv": "^16.4.5",
     "inquirer": "^9.2.17",
+    "inquirer-path": "^1.0.0-beta5",
     "openai": "^4.32.1",
     "ora": "^8.0.1"
   }
