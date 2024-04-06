@@ -90,9 +90,9 @@ async function configure_api() {
 }
 
 (async () => {
+  console.log('🦊 newton – a CLI that creates your API documentation for you with AI');
+  console.log('\n');
   if (process.argv.length == 2) {
-    console.log('🦊 newton – a CLI that creates your API documentation for you with AI');
-    console.log('\n');
     configure_api().then(() => {
       inquirer.prompt([
         {
@@ -162,8 +162,6 @@ async function configure_api() {
     }).catch(console.error);
   } else if (process.argv.length > 2) {
     if (options.transmogrifyOnly) {
-      console.log('🦊 newton – a CLI that creates your API documentation for you with AI');
-      console.log('\n');
       inquirer.prompt([
         {
           type: 'path',
