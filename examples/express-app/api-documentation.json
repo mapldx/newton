@@ -1,0 +1,162 @@
+[
+  [
+    {
+      "endpoint_title": "Create User",
+      "endpoint_url": "http://localhost:3000/users",
+      "endpoint_description": "Endpoint to create a new user.",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "username",
+          "field_description": "The username of the new user."
+        },
+        {
+          "field_name": "email",
+          "field_description": "The email of the new user."
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "message",
+          "field_description": "A message indicating the outcome of the operation."
+        },
+        {
+          "field_name": "username",
+          "field_description": "The username of the created user."
+        },
+        {
+          "field_name": "email",
+          "field_description": "The email of the created user."
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "User created successfully."
+        },
+        {
+          "response_type": "400",
+          "response_description": "Missing required arguments."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST http://localhost:3000/users -d 'username=johndoe&email=johndoe@example.com'",
+          "python_example": "import requests\n\nurl = 'http://localhost:3000/users'\npayload = {'username': 'johndoe', 'email': 'johndoe@example.com'}\nresponse = requests.post(url, data=payload)\nprint(response.json())",
+          "nodejs_example": "const axios = require('axios');\n\naxios.post('http://localhost:3000/users', { username: 'johndoe', email: 'johndoe@example.com' })\n    .then(response => console.log(response.data))\n    .catch(error => console.error(error));"
+        }
+      ],
+      "response_example": {
+        "message": "User created successfully",
+        "username": "johndoe",
+        "email": "johndoe@example.com"
+      }
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Get Products",
+      "endpoint_url": "http://localhost:3000/products",
+      "endpoint_description": "This endpoint retrieves a list of products.",
+      "endpoint_request": "GET",
+      "request_fields": [],
+      "response_fields": [
+        {
+          "field_name": "id",
+          "field_description": "The unique identifier of the product."
+        },
+        {
+          "field_name": "name",
+          "field_description": "The name of the product."
+        },
+        {
+          "field_name": "price",
+          "field_description": "The price of the product."
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": 200,
+          "response_description": "Success. Returns a list of products."
+        },
+        {
+          "response_type": 401,
+          "response_description": "Unauthorized. User not authenticated."
+        },
+        {
+          "response_type": 500,
+          "response_description": "Internal Server Error."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl http://localhost:3000/products",
+          "python_example": "requests.get('http://localhost:3000/products')",
+          "nodejs_example": "axios.get('http://localhost:3000/products')"
+        }
+      ],
+      "response_example": "[{ \"id\": 1, \"name\": \"Product A\", \"price\": 10.99 }, { \"id\": 2, \"name\": \"Product B\", \"price\": 19.99 }, { \"id\": 3, \"name\": \"Product C\", \"price\": 7.99 }]"
+    }
+  ],
+  [
+    {
+      "endpoint_title": "/orders",
+      "endpoint_url": "http://localhost:3000/orders",
+      "endpoint_description": "Endpoint to retrieve a list of orders",
+      "endpoint_request": "GET",
+      "request_fields": [],
+      "response_fields": [
+        {
+          "field_name": "id",
+          "field_description": "The unique identifier of the order"
+        },
+        {
+          "field_name": "product",
+          "field_description": "The name of the product in the order"
+        },
+        {
+          "field_name": "quantity",
+          "field_description": "The quantity of the product in the order"
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Successful retrieval of orders"
+        },
+        {
+          "response_type": "403",
+          "response_description": "Forbidden access if user is not authorized"
+        },
+        {
+          "response_type": "500",
+          "response_description": "Internal Server Error if an error occurs"
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl http://localhost:3000/orders",
+          "python_example": "requests.get('http://localhost:3000/orders')",
+          "nodejs_example": "axios.get('http://localhost:3000/orders')"
+        }
+      ],
+      "response_example": [
+        {
+          "id": 1,
+          "product": "Product A",
+          "quantity": 2
+        },
+        {
+          "id": 2,
+          "product": "Product B",
+          "quantity": 1
+        },
+        {
+          "id": 3,
+          "product": "Product C",
+          "quantity": 3
+        }
+      ]
+    }
+  ]
+]

@@ -1,0 +1,177 @@
+<h2>Create User</h2>
+
+<p><strong>Description:</strong> Endpoint to create a new user</p>
+<p><strong>URL:</strong> <code>http://localhost:3000/users</code></p>
+<p><strong>Method:</strong> <code>POST</code></p>
+
+<h3>Request</h3>
+
+<p><code>username</code>: The username of the new user</p>
+<p><code>email</code>: The email of the new user</p>
+
+<h3>Response</h3>
+
+<p><code>message</code>: A message indicating the result of the user creation</p>
+<p><code>username</code>: The username of the created user</p>
+<p><code>email</code>: The email of the created user</p>
+
+<h3>Response Types</h3>
+
+<p><strong>200</strong>: User created successfully</p>
+<p><strong>400</strong>: Missing required arguments</p>
+
+<h3>Request Examples</h3>
+
+<h4>cURL Example</h4>
+
+<pre><code class="bash">
+curl -X POST http://localhost:3000/users -d 'username=johndoe&email=johndoe@example.com'
+</code></pre>
+
+<h4>Python Example</h4>
+
+<pre><code class="python">
+requests.post('http://localhost:3000/users', json={'username': 'johndoe', 'email': 'johndoe@example.com'})
+</code></pre>
+
+<h4>Node.js Example</h4>
+
+<pre><code class="javascript">
+axios.post('http://localhost:3000/users', { username: 'johndoe', email: 'johndoe@example.com' })
+</code></pre>
+
+
+<h3>Response Example</h3>
+
+<pre><code class="json">
+{
+  "message": "User created successfully",
+  "username": "johndoe",
+  "email": "johndoe@example.com"
+}
+</code></pre>
+---
+
+<h2>Get Products</h2>
+
+<p><strong>Description:</strong> This endpoint retrieves a list of products.</p>
+<p><strong>URL:</strong> <code>http://localhost:3000/products</code></p>
+<p><strong>Method:</strong> <code>GET</code></p>
+
+<h3>Response</h3>
+
+<p><code>products</code>: An array of product objects containing id, name, and price.</p>
+
+<h3>Response Types</h3>
+
+<p><strong>200</strong>: Success: Returns a list of products.</p>
+<p><strong>401</strong>: Unauthorized: User is not authenticated.</p>
+<p><strong>500</strong>: Internal Server Error: An error occurred.</p>
+
+<h3>Request Examples</h3>
+
+<h4>cURL Example</h4>
+
+<pre><code class="bash">
+curl http://localhost:3000/products
+</code></pre>
+
+<h4>Python Example</h4>
+
+<pre><code class="python">
+requests.get('http://localhost:3000/products')
+</code></pre>
+
+<h4>Node.js Example</h4>
+
+<pre><code class="javascript">
+axios.get('http://localhost:3000/products')
+</code></pre>
+
+
+<h3>Response Example</h3>
+
+<pre><code class="json">
+[
+  {
+    "id": 1,
+    "name": "Product A",
+    "price": 10.99
+  },
+  {
+    "id": 2,
+    "name": "Product B",
+    "price": 19.99
+  },
+  {
+    "id": 3,
+    "name": "Product C",
+    "price": 7.99
+  }
+]
+</code></pre>
+---
+
+<h2>Get Orders</h2>
+
+<p><strong>Description:</strong> Endpoint to retrieve a list of orders</p>
+<p><strong>URL:</strong> <code>http://localhost:3000/orders</code></p>
+<p><strong>Method:</strong> <code>GET</code></p>
+
+<h3>Response</h3>
+
+<p><code>id</code>: The unique identifier of the order</p>
+<p><code>product</code>: The name of the product in the order</p>
+<p><code>quantity</code>: The quantity of the product in the order</p>
+
+<h3>Response Types</h3>
+
+<p><strong>200</strong>: Successful retrieval of orders</p>
+<p><strong>403</strong>: Forbidden, user is not authorized</p>
+<p><strong>500</strong>: Internal Server Error</p>
+
+<h3>Request Examples</h3>
+
+<h4>cURL Example</h4>
+
+<pre><code class="bash">
+curl http://localhost:3000/orders
+</code></pre>
+
+<h4>Python Example</h4>
+
+<pre><code class="python">
+requests.get('http://localhost:3000/orders')
+</code></pre>
+
+<h4>Node.js Example</h4>
+
+<pre><code class="javascript">
+axios.get('http://localhost:3000/orders')
+</code></pre>
+
+
+<h3>Response Example</h3>
+
+<pre><code class="json">
+[
+  {
+    "id": 1,
+    "product": "Product A",
+    "quantity": 2
+  },
+  {
+    "id": 2,
+    "product": "Product B",
+    "quantity": 1
+  },
+  {
+    "id": 3,
+    "product": "Product C",
+    "quantity": 3
+  }
+]
+</code></pre>
+---
+
+<p><code>Generated using <a href='https://github.com/mapldx/newton' target='_blank'>🦊 mapldx/newton →</a> on 4/5/2024</code></p>

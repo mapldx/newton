@@ -1,0 +1,127 @@
+[
+  [
+    {
+      "endpoint_title": "Hello Endpoint",
+      "endpoint_url": "http://localhost:3000/",
+      "endpoint_description": "A simple endpoint that returns a greeting message.",
+      "endpoint_request": "GET",
+      "request_fields": [],
+      "response_fields": [
+        {
+          "field_name": "message",
+          "field_description": "A greeting message"
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Successful response with a greeting message"
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl http://localhost:3000/",
+          "python_example": "requests.get('http://localhost:3000/')",
+          "nodejs_example": "axios.get('http://localhost:3000/')"
+        }
+      ],
+      "response_example": {
+        "message": "Hello, World!"
+      }
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Get Data",
+      "endpoint_url": "http://localhost:3000/api/data",
+      "endpoint_description": "This endpoint retrieves user data including name, age, and city.",
+      "endpoint_request": "GET",
+      "request_fields": [
+        {
+          "field_name": "None",
+          "field_description": "No request body needed for this endpoint."
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "name",
+          "field_description": "The name of the user."
+        },
+        {
+          "field_name": "age",
+          "field_description": "The age of the user."
+        },
+        {
+          "field_name": "city",
+          "field_description": "The city where the user resides."
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": "200",
+          "response_description": "Successful retrieval of user data."
+        },
+        {
+          "response_type": "500",
+          "response_description": "Internal Server Error in case of an exception."
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl http://localhost:3000/api/data",
+          "python_example": "requests.get('http://localhost:3000/api/data')",
+          "nodejs_example": "axios.get('http://localhost:3000/api/data')"
+        }
+      ],
+      "response_example": {
+        "name": "John Doe",
+        "age": 30,
+        "city": "New York"
+      }
+    }
+  ],
+  [
+    {
+      "endpoint_title": "Create User",
+      "endpoint_url": "http://localhost:3000/api/users",
+      "endpoint_description": "Endpoint to create a new user",
+      "endpoint_request": "POST",
+      "request_fields": [
+        {
+          "field_name": "username",
+          "field_description": "The username of the new user"
+        },
+        {
+          "field_name": "password",
+          "field_description": "The password of the new user"
+        }
+      ],
+      "response_fields": [
+        {
+          "field_name": "message",
+          "field_description": "A message indicating the status"
+        }
+      ],
+      "response_types": [
+        {
+          "response_type": 201,
+          "response_description": "User successfully created"
+        },
+        {
+          "response_type": 401,
+          "response_description": "Unauthorized, authentication failed"
+        }
+      ],
+      "request_examples": [
+        {
+          "curl_example": "curl -X POST http://localhost:3000/api/users -d 'username=johndoe&password=pass123'",
+          "python_example": "requests.post('http://localhost:3000/api/users', data={'username': 'johndoe', 'password': 'pass123'})",
+          "nodejs_example": "axios.post('http://localhost:3000/api/users', { username: 'johndoe', password: 'pass123' })"
+        }
+      ],
+      "response_example": {
+        "message": "User created"
+      }
+    }
+  ]
+]
