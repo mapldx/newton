@@ -199,7 +199,7 @@ async function copy_folder(source, target) {
 
 async function next_handler(json_file, answers) {
   let save_path = answers.path;
-  let base_url = answers.url;
+  let base_url = answers.baseUrl;
   await inquirer.prompt([
     {
       type: 'input',
