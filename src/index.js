@@ -35,7 +35,7 @@ async function parse_path(directory, target = 'package.json') {
   // console.log('Checking path', directory);
   const files = await fs.readdir(directory, { withFileTypes: true });
   for (const file of files) {
-    if (file.isDirectory()) {
+    if (file.isDirectory() && file.name !== 'node_modules') {
       const result = await parse_path(path.join(directory, file.name), target);
       if (result) {
         return result;
@@ -58,6 +58,7 @@ async function parse_entrypoint(config, package_path, base_url) {
     spinner = ora('Reading package.json for a project entrypoint').start();
     const file = await fs.readFile(package_path, 'utf8');
     entrypoint = JSON.parse(file).main;
+    console.log(file);
     if (!entrypoint) {
       // console.log('No entrypoint found');
       spinner.fail('No entrypoint found in package.json (main field)');
