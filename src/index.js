@@ -190,6 +190,12 @@ async function configure_api() {
           // await fs.access(path.join(answers.path, 'api-documentation.json'), fs.constants.F_OK);
           await inquirer.prompt([
             {
+              type: 'input',
+              name: 'baseUrl',
+              message: 'Enter the base URL for your API, e.g. http://api.example.com:',
+              default: 'http://localhost:3000'
+            },
+            {
               type: 'list',
               name: 'target',
               message: 'Select the target format for the documentation:',
@@ -198,6 +204,7 @@ async function configure_api() {
             }
           ]).then(async response => {
             answers.target = response.target;
+            answers.baseUrl = response.baseUrl;
             let spinner = ora('Transmogrifying API documentation to ' + answers.target).start();
             answers.path = path.dirname(answers.path);
             const json_path = path.join(answers.path, 'api-documentation.json');
