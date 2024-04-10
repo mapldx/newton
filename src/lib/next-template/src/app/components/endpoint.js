@@ -45,7 +45,7 @@ export default function Endpoint({ data, isDark }) {
         <div class="" id={`${data.endpoint_title.replace(' ', '-')}`}>
             <div class="grid grid-cols-1 gap-4 mb-12 sm:grid-cols-2 sm:gap-8">
                 <div class="rounded-lg">
-                    <p class={`${isDark ? 'text-slate-300' : 'text-black'} font-semibold pb-3 text-sm tracking-wide`}>{data.endpoint_title}</p>
+                    <p class={`${isDark ? 'text-slate-300' : 'text-black'} font-extrabold text-xl mb-4 tracking-wide`}>{data.endpoint_title}</p>
                     <p class={`font-mono mb-3 text-sm`}>
                         <span class={`${endpoint_request_bg} max-w-fit p-1 px-2 rounded-md mr-2`}>
                             {data.endpoint_request}
