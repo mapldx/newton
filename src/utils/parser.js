@@ -107,8 +107,8 @@ function python_handler(line, capturing, content, endpoint, endpoints_set) {
 
 export async function parse_entrypoint(config, package_path, base_url) {
   try {
-    const entrypoint_path = await locate_file(config, package_path);
-    const endpoints_set = await read_endpoints(config, entrypoint_path);
+    // const entrypoint_path = await locate_file(config, package_path);
+    const endpoints_set = await read_endpoints(config, package_path);
     const responses = await generate_doc(endpoints_set, config, base_url);
 
     return responses;
