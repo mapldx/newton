@@ -8,6 +8,7 @@ import inquirer from 'inquirer';
 import ora from 'ora';
 import { PathPrompt } from 'inquirer-path';
 import { parse_entrypoint } from './utils/parser.js';
+import { verify } from 'crypto';
 
 const program = new Command();
 process.removeAllListeners('warning');
@@ -167,13 +168,26 @@ async function configure_api() {
         {
           type: 'path',
           name: 'path',
-          message: 'Enter the path to your project directory (tab to complete):',
-          directoryOnly: true,
+          message: 'Enter the path to a newton-generated JSON (tab to complete):',
+          directoryOnly: false,
           default: '.',
+          validate: async function (value) {
+            try {
+              if (value.endsWith('.json')) {
+                await fs.access(value, fs.constants.F_OK);
+                return true;
+              } else {
+                return 'Please enter a path to a JSON file';
+              }
+            } catch (err) {
+              return 'File not found';
+            }
+          }
         },
       ]).then(async answers => {
         try {
-          await fs.access(path.join(answers.path, 'api-documentation.json'), fs.constants.F_OK);
+          await fs.access(answers.path, fs.constants.F_OK);
+          // await fs.access(path.join(answers.path, 'api-documentation.json'), fs.constants.F_OK);
           await inquirer.prompt([
             {
               type: 'list',
@@ -185,6 +199,7 @@ async function configure_api() {
           ]).then(async response => {
             answers.target = response.target;
             let spinner = ora('Transmogrifying API documentation to ' + answers.target).start();
+            answers.path = path.dirname(answers.path);
             const json_path = path.join(answers.path, 'api-documentation.json');
             await set_format(answers, json_path, spinner);
           });
