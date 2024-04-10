@@ -8,7 +8,6 @@ import inquirer from 'inquirer';
 import ora from 'ora';
 import { PathPrompt } from 'inquirer-path';
 import { parse_entrypoint } from './utils/parser.js';
-import { verify } from 'crypto';
 
 const program = new Command();
 process.removeAllListeners('warning');
