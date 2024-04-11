@@ -53,7 +53,7 @@ _[showing input and outputs]_
 <li>
     <code>npx newton</code> exported to simple HTML page [<a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.html">source</a>, <a href="https://github.com/mapldx/newton/blob/main/examples/express-simple-html.png?raw=true">preview</a>]
 <li>
-    <code>npx newton</code> exported to Markdown [<a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.md">source</a>]
+    <code>npx newton</code> exported to Markdown [<a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.md">preview</a>]
 </li>
 <li>
     <code>npx newton</code> exported to JSON [<a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.json">source</a>]
