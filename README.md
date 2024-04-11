@@ -1,6 +1,6 @@
 <div align="center">
     <div>
-        <img src="https://raw.githubusercontent.com/mapldx/newton/main/examples/cover-example.png?token=GHSAT0AAAAAACMLWUJZGJYYDG55XVXQKAK6ZQPZEBQ"/>
+        <img src="https://raw.githubusercontent.com/mapldx/newton/main/examples/cover-example.png"/>
         <h1 align="center">🦊 newton</h1>
     </div>
 	<p>A CLI that creates your API documentation for you with AI</p>
@@ -47,7 +47,7 @@ _[showing completed results]_
 </details>
 <details>
     <summary><code>npx newton</code> exported to simple HTML page <a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.html">(source)</a>:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/express-app/express-simple-html.png?raw=true">
+    <img src="https://github.com/mapldx/newton/blob/main/examples/express-simple-html.png?raw=true">
 </details>
 <details>
     <summary><code>npx newton</code> exported to JSON <a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.json">here</a></summary>
@@ -60,15 +60,15 @@ _[showing completed results]_
 _[showing steps in process]_
 <details>
     <summary>Talking to AI to generate documentation for a route:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-app/flask-at-talking-to-ai.png?raw=true">
+    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-at-talking-to-ai.png?raw=true">
 </details>
 <details open>
     <summary>Generating a Next.js site from an existing newton-generated JSON:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-app/flask-at-transmogrifying-existing.png?raw=true">
+    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-at-transmogrifying-existing.png?raw=true">
 </details>
 <details>
     <summary>Generating of Next.js site export complete:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-app/flask-at-complete-next.png?raw=true">
+    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-at-complete-next.png?raw=true">
 </details>
 
 ## While in beta...
