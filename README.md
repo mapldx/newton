@@ -5,16 +5,17 @@
     </div>
 	<p>A CLI that creates your API documentation for you with AI</p>
 	<a href="https://www.npmjs.com/package/newton-aidocs">
-        <img alt="NPM Version" src="https://img.shields.io/npm/v/newton-aidocs">
-    </a>
+            <img alt="NPM Version" src="https://img.shields.io/npm/v/newton-aidocs">
+    	</a>
     <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/mapldx/newton">
 </div>
 
-## Examples
+## Example
 ### Node.js (Express) project 
-_[showing completed results]_
-<details open>
-    <summary>Raw <code>index.js</code> as source file:</summary>
+_[showing input and outputs]_
+<li>
+    <summary><code>index.js</code> as source (input) file:</summary>
+    <br>
 
     const express = require('express');
     const app = express();
@@ -31,82 +32,124 @@ _[showing completed results]_
     .
     .
     [full source in examples/express-app/index.js]
-</details>
-<details open>
-    <summary><code>npx newton</code> exported to Next.js site:</summary>
+</li>
+<li>
+    <summary><code>npx newton</code> exported (output) to Next.js site:</summary>
+    <br>
 <table>
   <tr>
-    <th>Light</th>
-    <th>Dark</th>
+    <td colspan="2" align="center">Preview page here: <a href="https://newton-next-export.surge.sh/" target="_blank">https://newton-next-export.surge.sh/</a></td>
+  </tr>
+  <tr>
+    <th align="center">Light</th>
+    <th align="center">Dark</th>
   </tr>
   <tr>
     <td><img src="https://github.com/mapldx/newton/blob/main/examples/next-light-mode.png?raw=true"></td>
     <td><img src="https://github.com/mapldx/newton/blob/main/examples/next-dark-mode.png?raw=true"></td>
   </tr>
 </table>
-</details>
-<details>
-    <summary><code>npx newton</code> exported to simple HTML page <a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.html">(source)</a>:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/express-simple-html.png?raw=true">
-</details>
-<details>
-    <summary><code>npx newton</code> exported to JSON <a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.json">here</a></summary>
-</details>
-<details>
-    <summary><code>npx newton</code> exported to Markdown <a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.md">here</a></summary>
-</details>
+</li>
+<li>
+    <code>npx newton</code> exported to simple HTML page [<a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.html">source</a>, <a href="https://github.com/mapldx/newton/blob/main/examples/express-simple-html.png?raw=true">preview</a>]
+<li>
+    <code>npx newton</code> exported to Markdown [<a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.md">source</a>]
+</li>
+<li>
+    <code>npx newton</code> exported to JSON [<a href="https://github.com/mapldx/newton/blob/main/examples/express-app/api-documentation.json">source</a>]
+</li>
 
-### Flask (Python) project 
-_[showing steps in process]_
-<details>
-    <summary>Talking to AI to generate documentation for a route:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-at-talking-to-ai.png?raw=true">
-</details>
-<details open>
-    <summary>Generating a Next.js site from an existing newton-generated JSON:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-at-transmogrifying-existing.png?raw=true">
-</details>
-<details>
-    <summary>Generating of Next.js site export complete:</summary>
-    <img src="https://github.com/mapldx/newton/blob/main/examples/flask-at-complete-next.png?raw=true">
-</details>
-
-## While in beta...
-### Set up
-1. Install `newton` globally
+## Set up
+### Installing
+1. Install `newton` globally:
 ```
 npm install -g newton-aidocs
 ```
-2. Perform first time set up by configuring `newton` with an OpenAI API key that has billing set up
+2. Perform first time set up by configuring `newton` with an OpenAI API key that has billing set up:
 ```
 npx newton
 ```
-
-### Versions covered
-- `1.0.6`
-- `1.0.5`
-- `1.0.4`:
-    - add search functionality on Next generated site, searching by endpoint title
-    - add dark color scheme as an option for exporting Next generated site
-    - add `npx newton -t` option to allow converting of previously generated or existing newton-generated JSON to other export options
-- `1.0.3`
-- `1.0.2`:
-    - add functionality to export generated documentation to responsive Next.js site
-    - add tab autocompletion for specifying project directory path
-- `1.0.1`:
-    - add support for Flask (Python) projects
-    - allow user to specify their own OpenAI API key for saved locally for persistent use
-- `1.0.0`:
-    - add functionality to generate documentation in JSON, Markdown, and HTML for Express.js (Node.js) APIs using GPT-3.5 Turbo
-
-### Usage
+> Note: This creates a `.newton` file in your home directory where this API key, along with any other future customizable newton configurations, is stored.
+### Updating
+1. Check the version you have installed:
 ```
-npx newton [--version/--transmogrify-only/--help]
+npx newton --version
 ```
-1. For **Express.js (Node.js)** projects, `newton` works when:
-- one valid package.json exists in the project folder (ideally, initialized by `npm init`), other than any in `node_modules` as they are ignored by default
-- a "main" field exists and is populated in the package.json file
-- the "main" field points to the app's entrypoint, which contains the Express.js routes, e.g. where each route begins on a new line with `app.{get, post, put, delete}`:
+2. If it is not equivalent to the latest version:
+```
+npm update -g newton-aidocs
+```
+
+## Usage
+To start an interactive prompt to provide `newton` with the details to generate the documentation for your API:
+```
+npx newton
+```
+If you have an existing `api-documentation.json` file previously generated by `newton` and want to export it to another `newton` format (i.e. Markdown, HTML, Next.js):
+```
+npx newton -t
+```
+
+## Changelog
+<details open>
+    <summary><b><i>stable</i></b></summary>
+    <ul>
+        <li><code>1.0.7</code>
+            <ul>
+                <li>updated interactive prompts for enhanced reliability and user flexibility:
+                    <ul>
+                        <li>in default mode, now directly prompts for entrypoint filepath rather than project directory</li>
+                        <li>in transmogrify mode, now directly prompts for the newton-generated JSON filepath rather than project directory</li>
+                        <li>validate input filepaths</li>
+                    </ul>
+                </li>
+                <li>fixes for Next export:
+                    <ul>
+                        <li>added a prompt for base URL in transmogrify mode as it previously resulted in an undefined value</li>
+                        <li>modified code block for copy button to remain static while scrolling</li>
+                        <li>increased font size for endpoint titles</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</details>
+<details>
+    <summary><b><i>pre-releases (beta)</i></b></summary>
+    <ul>
+    	<li><code>1.0.6</code></li>
+    	<li><code>1.0.5</code></li>
+    	<li><code>1.0.4</code>:
+            <ul>
+            	<li>add search functionality on Next generated site, searching by endpoint title</li>
+            	<li>add dark color scheme as an option for exporting Next generated site</li>
+            	<li>add <code>npx newton -t</code> option to allow converting of previously generated or existing newton-generated JSON to other export options</li>
+            </ul>
+    	</li>
+    	<li><code>1.0.3</code></li>
+    	<li><code>1.0.2</code>:
+            <ul>
+            	<li>add functionality to export generated documentation to responsive Next.js site</li>
+            	<li>add tab autocompletion for specifying project directory path</li>
+            </ul>
+    	</li>
+    	<li><code>1.0.1</code>:
+            <ul>
+                <li>add support for Flask (Python) projects</li>
+                <li>allow user to specify their own OpenAI API key for saved locally for persistent use</li>
+            </ul>
+    	</li>
+    	<li><code>1.0.0</code>:
+            <ul>
+                <li>add functionality to generate documentation in JSON, Markdown, and HTML for Express.js (Node.js) APIs using GPT-3.5 Turbo</li>
+            </ul>
+    	</li>
+    </ul>
+</details>
+
+## Specifications
+1. For **Express.js (Node.js)** projects, `newton` works best when:
+- the input file contains Express.js routes, e.g. where each route begins on a new line with `app.{get, post, put, delete}`:
 ```
 const express = require('express')
 const app = express()
@@ -129,9 +172,8 @@ app.post('/api/auth', async (req, res) => {
 .
 .
 ```
-2. For **Flask (Python)** projects, `newton` works when:
-- a file called `app.py` exists in the project directory (can be nested)
-- `app.py` houses the Flask routes, e.g. where each route begins on a new line with `@app.route`:
+2. For **Flask (Python)** projects, `newton` works best when:
+- the input file contains the Flask routes, e.g. where each route begins on a new line with `@app.route`:
 ```
 from flask import Flask, request
 .
@@ -159,5 +201,5 @@ def create_user():
 ```
 > Note: The files mentioned above are provided for illustrative purposes only and do not guarantee functionality. However, their formats served as a guideline for Newton's parsing functionalities.
 
-### What is `transmogrify`?
+## What is `transmogrify`?
 <img src="https://github.com/mapldx/newton/blob/main/examples/transmogrifier-comic.png?raw=true">
