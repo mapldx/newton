@@ -100,7 +100,7 @@ npx newton -t
                     <ul>
                         <li>in default mode, now directly prompts for entrypoint filepath rather than project directory</li>
                         <li>in transmogrify mode, now directly prompts for the newton-generated JSON filepath rather than project directory</li>
-                        <li>validate input filepaths</li>
+                        <li>in both modes, validate input filepaths as they are entered to ensure that they exist and are of the expected format</li>
                     </ul>
                 </li>
                 <li>fixes for Next export:
