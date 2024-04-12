@@ -103,8 +103,12 @@ async function configure_api() {
           default: '.',
           validate: async function (value) {
             try {
-              await fs.access(value, fs.constants.F_OK);
-              return true;
+              if (value.endsWith('.js') || value.endsWith('.py')) {
+                await fs.access(value, fs.constants.F_OK);
+                return true;
+              } else {
+                return 'Please enter a path to a JavaScript or Python file';
+              }
             } catch (err) {
               return 'File not found';
             }
