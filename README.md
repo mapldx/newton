@@ -94,13 +94,19 @@ npx newton -t
 <details open>
     <summary><b><i>stable</i></b></summary>
     <ul>
+	<li><code>1.0.8</code></li>
+	<ul>
+	    <li>in default mode, validate filepath as it is input to ensure that it exists and is of the expected <code>.js</code> or <code>.py</code> format</li>
+	</ul>
+    </ul>
+    <ul>
         <li><code>1.0.7</code>
             <ul>
                 <li>updated interactive prompts for enhanced reliability and user flexibility:
                     <ul>
                         <li>in default mode, now directly prompts for entrypoint filepath rather than project directory</li>
                         <li>in transmogrify mode, now directly prompts for the newton-generated JSON filepath rather than project directory</li>
-                        <li>in both modes, validate input filepaths as they are entered to ensure that they exist and are of the expected format</li>
+			<li>in transmogrify mode, validate filepath as it is input to ensure that it exists and is of the expected <code>.json</code> format</li>
                     </ul>
                 </li>
                 <li>fixes for Next export:
